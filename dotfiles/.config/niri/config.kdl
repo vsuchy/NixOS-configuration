@@ -1,0 +1,140 @@
+// --- General ---
+
+hotkey-overlay { skip-at-startup; }
+prefer-no-csd
+recent-windows { off; }
+
+// --- Input ---
+
+input {
+  keyboard {
+    xkb { layout "us"; }
+
+    repeat-delay 500
+    repeat-rate 50
+  }
+
+  mouse { natural-scroll; }
+}
+
+// --- Outputs ---
+
+output "eDP-1" {
+  mode "1920x1200@60.000"
+  scale 1.25
+
+  hot-corners { off; }
+
+  layout {
+    center-focused-column "always"
+    always-center-single-column
+
+    default-column-width { proportion 0.75; }
+  }
+}
+
+output "DP-1" {
+  mode "3840x2160@60.000"
+  scale 1.5
+
+  hot-corners { off; }
+
+  layout {
+    default-column-width { proportion 0.5; }
+  }
+}
+
+// --- Layout ---
+
+layout {
+  gaps 20
+
+  default-column-width { proportion 0.5; }
+  preset-column-widths { proportion 0.5; proportion 0.75; proportion 1.0; }
+  preset-window-heights { proportion 0.5; proportion 1.0; }
+
+  focus-ring {
+    width 5
+
+    active-color "#BD93F9"
+    inactive-color "#6272A4"
+    urgent-color "#FF5555"
+  }
+
+  background-color "#8BE9FD"
+}
+
+// --- Layer Rules ---
+
+layer-rule {
+  match namespace="waybar"
+
+  opacity 0.99
+}
+
+// --- Window Rules ---
+
+window-rule {
+  clip-to-geometry true
+  geometry-corner-radius 5
+}
+
+window-rule {
+  match app-id="org.gnome.Boxes"
+
+  //open-floating false
+  //open-fullscreen false
+  //open-maximized false
+  //open-maximized-to-edges false
+
+  //tiled-state true
+
+  default-column-width { proportion 1.0; }
+}
+
+// --- Key Bindings ---
+
+binds {
+  Super+Alt+1 { spawn "firefox"; }
+  Super+Alt+2 { spawn "ghostty"; }
+  Super+Alt+3 { spawn "gnome-boxes"; }
+
+  Super+Q { close-window; }
+
+  Super+Left { focus-column-left; }
+  Super+Right { focus-column-right; }
+  Super+Up { focus-window-up; }
+  Super+Down { focus-window-down; }
+
+  Super+Ctrl+Left { move-column-left; }
+  Super+Ctrl+Right { move-column-right; }
+  Super+Ctrl+Up { move-window-up; }
+  Super+Ctrl+Down { move-window-down; }
+
+  Super+Home { focus-column-first; }
+  Super+End { focus-column-last; }
+  Super+Ctrl+Home { move-column-to-first; }
+  Super+Ctrl+End { move-column-to-last; }
+
+  Super+F { maximize-column; }
+  Super+Shift+F { fullscreen-window; }
+  Super+R { switch-preset-column-width; }
+  Super+Shift+R { switch-preset-window-height; }
+
+  Super+Comma { consume-window-into-column; }
+  Super+Period { expel-window-from-column; }
+
+  Super+Page_Up { focus-workspace-up; }
+  Super+Page_Down { focus-workspace-down; }
+  Super+Ctrl+Page_Up { move-column-to-workspace-up; }
+  Super+Ctrl+Page_Down { move-column-to-workspace-down; }
+
+  Super+1 { focus-workspace 1; }
+  Super+2 { focus-workspace 2; }
+  Super+3 { focus-workspace 3; }
+  Super+Ctrl+1 { move-column-to-workspace 1; }
+  Super+Ctrl+2 { move-column-to-workspace 2; }
+  Super+Ctrl+3 { move-column-to-workspace 3; }
+
+  Super+Ctrl+Q { quit; }
+}
