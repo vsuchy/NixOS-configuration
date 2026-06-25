@@ -1,0 +1,28 @@
+" --- Files / Backups ---
+
+set history=0        " Maximum number of stored items in all histories.
+set vifminfo=        " Controls what will be saved in the vifminfo file.
+set sessionoptions=  " An equivalent of vifminfo for sessions.
+set noautochpos      " Disable information about cursor position in the view history.
+set notrash          " Don't use trash directory.
+
+" --- Vifm UI ---
+
+set dotfiles                                   " Show dot files.
+set number                                     " Print line number in front of each file name.
+set incsearch                                  " Search and view update is being performed each time search pattern is changed.
+
+set timefmt="%Y-%m-%d %H:%M:%S"                " Format of time in file list.
+set viewcolumns="-{name}.,20{mtime},10{size}"  " List of columns in the view.
+set statusline=" %t%[ → %T%]%= %A %u:%g "      " The content of the status line.
+
+set vicmd=vim                                  " Command used to edit files.
+
+" --- Mappings ---
+
+nnoremap c :copy!<cr>
+nnoremap x :move!<cr>
+nnoremap d :delete!<cr>
+nnoremap m :mkdir
+nnoremap t :select<cr><down>
+nnoremap q :quit<cr>
