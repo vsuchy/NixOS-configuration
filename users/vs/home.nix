@@ -27,5 +27,7 @@
   home.file = {
     ".vimrc".source = ../../dotfiles/.vimrc;
     ".config/vifm/vifmrc".source = ../../dotfiles/.config/vifm/vifmrc;
+
+    ".config/niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
   };
 }

@@ -19,6 +19,7 @@ in
       ./hardware-configuration.nix
 
       ../../modules/base.nix
+      ../../modules/desktop.nix
     ];
 
     system.stateVersion = "26.05";

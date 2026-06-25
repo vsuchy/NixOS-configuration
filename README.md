@@ -25,6 +25,7 @@ This repository contains a flake-based NixOS configuration.
 |       |-- hardware-configuration.nix
 |-- modules
 |   |-- base.nix
+|   |-- desktop.nix
 |   |-- ...
 |-- users
 |   |-- vs
