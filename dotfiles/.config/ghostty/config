@@ -1,0 +1,14 @@
+# --- General ---
+
+auto-update = off
+shell-integration-features = ssh-env,sudo
+
+# --- UI ---
+
+window-padding-x = 10
+window-padding-y = 10
+
+font-family = Cascadia Code NF
+font-size = 11
+
+theme = Dracula

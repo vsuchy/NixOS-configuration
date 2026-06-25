@@ -24,10 +24,35 @@ in
     };
   };
 
+  # --- Fonts ---
+
+  fonts.packages = [
+    pkgs.nerd-fonts.caskaydia-cove
+  ];
+
+  fonts.fontconfig.localConf = ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+    <fontconfig>
+      <alias binding="same">
+        <family>Cascadia Code NF</family>
+        <prefer>
+          <family>CaskaydiaCove NF</family>
+        </prefer>
+      </alias>
+    </fontconfig>
+    '';
+
   # --- Niri ---
 
   programs.niri = {
     enable = true;
     useNautilus = false;
   };
+
+  # --- Applications ---
+
+  environment.systemPackages = [
+    pkgs.ghostty
+  ];
 }
