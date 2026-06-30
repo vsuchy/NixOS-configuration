@@ -99,7 +99,7 @@ Run Disko from this repository's locked flake input:
 ```sh
 nix run .#disko -- \
   --mode destroy,format,mount \
-  ./hosts/VSThinkPad/disko.nix \
+  ./hosts/thinkpad-p14s/disko.nix \
   --argstr disk "$DISK"
 ```
 
@@ -114,14 +114,14 @@ nixos-generate-config --root /mnt
 Use the generated file:
 
 ```sh
-cp /mnt/etc/nixos/hardware-configuration.nix ./hosts/VSThinkPad/hardware-configuration.nix
+cp /mnt/etc/nixos/hardware-configuration.nix ./hosts/thinkpad-p14s/hardware-configuration.nix
 ```
 
 Important: Disko is the source of truth for filesystems, swap, LUKS mappings, and
 resume configuration in this repository. Edit
-`./hosts/VSThinkPad/hardware-configuration.nix` and remove generated
+`./hosts/thinkpad-p14s/hardware-configuration.nix` and remove generated
 `fileSystems`, `swapDevices`, and duplicate `boot.initrd.luks.devices` entries
-unless you intentionally reconcile them with `hosts/VSThinkPad/disko.nix`.
+unless you intentionally reconcile them with `hosts/thinkpad-p14s/disko.nix`.
 
 ## 8. Install NixOS
 
@@ -129,13 +129,13 @@ Run a dry evaluation first:
 
 ```sh
 nix flake check
-nixos-rebuild dry-build --flake .#VSThinkPad
+nixos-rebuild dry-build --flake .#thinkpad-p14s
 ```
 
 Install:
 
 ```sh
-nixos-install --flake .#VSThinkPad
+nixos-install --flake .#thinkpad-p14s
 ```
 
 Set the root password when prompted.
@@ -158,4 +158,45 @@ Reboot:
 
 ```sh
 reboot
+```
+
+## VMware Fusion VM Notes
+
+For `vmware-fusion` on a Mac with Apple silicon, use an `aarch64-linux` NixOS
+ISO. This host uses Disko with the same btrfs subvolume layout as
+`thinkpad-p14s`, but without LUKS encryption and with a 16 GiB swap partition.
+
+Identify the VM disk carefully, then run the destructive Disko step against the
+VM host layout:
+
+```sh
+export DISK=/dev/nvme0n1
+lsblk "$DISK"
+```
+
+```sh
+nix run .#disko -- \
+  --mode destroy,format,mount \
+  ./hosts/vmware-fusion/disko.nix \
+  --argstr disk "$DISK"
+```
+
+Generate the VM hardware configuration:
+
+```sh
+nixos-generate-config --root /mnt
+cp /mnt/etc/nixos/hardware-configuration.nix ./hosts/vmware-fusion/hardware-configuration.nix
+```
+
+Disko owns filesystems and swap for `vmware-fusion`. Edit the generated
+`./hosts/vmware-fusion/hardware-configuration.nix` and remove generated
+`fileSystems` and `swapDevices` unless you intentionally reconcile them with
+`hosts/vmware-fusion/disko.nix`.
+
+Install the VM host with:
+
+```sh
+nix flake check
+nixos-rebuild dry-build --flake .#vmware-fusion
+nixos-install --flake .#vmware-fusion
 ```

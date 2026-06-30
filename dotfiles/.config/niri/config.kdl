@@ -44,6 +44,10 @@ output "DP-1" {
   }
 }
 
+output "Virtual-1" {
+  scale 2.0
+}
+
 // --- Layout ---
 
 layout {
