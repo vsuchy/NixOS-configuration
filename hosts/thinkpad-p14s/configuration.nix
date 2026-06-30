@@ -19,6 +19,7 @@ in
       ./hardware-configuration.nix
 
       ../../modules/base.nix
+      ../../modules/console.nix
       ../../modules/desktop.nix
     ];
 

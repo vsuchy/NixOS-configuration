@@ -24,6 +24,10 @@
   networking.modemmanager.enable = false;
   networking.networkmanager.enable = true;
 
+  # --- Shell ---
+
+  programs.zsh.enable = true;
+
   # --- Users ---
 
   users.users = {
@@ -37,14 +41,4 @@
 
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
-
-  # --- Packages ---
-
-  environment.systemPackages = with pkgs; [
-    git
-    vifm
-    vim
-  ];
-
-  programs.zsh.enable = true;
 }
