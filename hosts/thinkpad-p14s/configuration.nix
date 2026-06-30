@@ -2,7 +2,7 @@ let
   host = {
     platform = "x86_64-linux";
     disk = "/dev/nvme0n1";
-    hostname = "VSThinkPad";
+    hostname = "VSNixOSTP";
     username = "vs";
     userFullName = "Vlad Suchy";
   };
@@ -23,6 +23,9 @@ in
     ];
 
     system.stateVersion = "26.05";
+
+    hardware.enableRedistributableFirmware = true;
+    hardware.cpu.amd.updateMicrocode = true;
 
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;

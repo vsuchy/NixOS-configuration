@@ -18,11 +18,6 @@
   console.keyMap = "us";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # --- Hardware ---
-
-  hardware.cpu.amd.updateMicrocode = true;
-  hardware.enableRedistributableFirmware = true;
-
   # --- Networking ---
 
   networking.hostName = host.hostname;

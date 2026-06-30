@@ -23,29 +23,44 @@
   outputs = inputs@{ nixpkgs, disko, home-manager, ... }:
 
   let
-    configuration = import ./hosts/VSThinkPad/configuration.nix;
-    host = configuration.host;
+    mkHost = path:
+
+      let
+        configuration = import path;
+        host = configuration.host;
+      in
+
+      nixpkgs.lib.nixosSystem {
+        system = host.platform;
+
+        modules = [
+          configuration.module
+          disko.nixosModules.disko
+          home-manager.nixosModules.home-manager
+        ];
+        specialArgs = {
+          inherit inputs host;
+          disk = host.disk;
+        };
+      };
   in
 
   {
-    apps.${host.platform}.disko = {
+    nixosConfigurations = {
+      "thinkpad-p14s" = mkHost ./hosts/thinkpad-p14s/configuration.nix;
+      "vmware-fusion" = mkHost ./hosts/vmware-fusion/configuration.nix;
+    };
+
+    apps.x86_64-linux.disko = {
       type = "app";
-      program = "${disko.packages.${host.platform}.disko}/bin/disko";
+      program = "${disko.packages.x86_64-linux.disko}/bin/disko";
       meta.description = "Run Disko from the locked flake input";
     };
 
-    nixosConfigurations.${host.hostname} = nixpkgs.lib.nixosSystem {
-      system = host.platform;
-
-      modules = [
-        configuration.module
-        disko.nixosModules.disko
-        home-manager.nixosModules.home-manager
-      ];
-      specialArgs = {
-        inherit inputs host;
-        disk = host.disk;
-      };
+    apps.aarch64-linux.disko = {
+      type = "app";
+      program = "${disko.packages.aarch64-linux.disko}/bin/disko";
+      meta.description = "Run Disko from the locked flake input";
     };
   };
 }
