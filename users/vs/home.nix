@@ -32,5 +32,6 @@
 
     ".config/ghostty/config".source = ../../dotfiles/.config/ghostty/config;
     ".config/niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
+    ".config/waybar".source = ../../dotfiles/.config/waybar;
   };
 }
