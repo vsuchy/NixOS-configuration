@@ -27,6 +27,7 @@
   home.file = {
     ".vimrc".source = ../../dotfiles/.vimrc;
     ".config/fastfetch/config.jsonc".source = ../../dotfiles/.config/fastfetch/config.jsonc;
+    ".config/nvim/init.lua".source = ../../dotfiles/.config/nvim/init.lua;
     ".config/vifm/vifmrc".source = ../../dotfiles/.config/vifm/vifmrc;
 
     ".config/ghostty/config".source = ../../dotfiles/.config/ghostty/config;
