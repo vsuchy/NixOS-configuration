@@ -52,7 +52,7 @@ in
 
   # --- Applications ---
 
-  environment.systemPackages = [
-    pkgs.ghostty
+  environment.systemPackages = with pkgs; [
+    ghostty
   ];
 }
