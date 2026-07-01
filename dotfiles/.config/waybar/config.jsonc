@@ -1,0 +1,68 @@
+{
+  // --- General ---
+
+  "layer": "top",
+  "height": 40,
+  "margin-top": 10,
+  "margin-left": 10,
+  "margin-right": 10,
+
+  // --- Modules ---
+
+  "modules-left": [ "niri/workspaces" ],
+  "modules-center": [ "clock" ],
+  "modules-right": [ "network", "battery", "wireplumber", "custom/menu" ],
+
+  // --- Left ---
+
+  "niri/workspaces": {
+    "format": "{index}"
+  },
+
+  // --- Center ---
+
+  "clock": {
+    "format": "{0:%d.%m.%Y} {0:%H:%M:%S}",
+    "interval": 1,
+    "tooltip": false
+  },
+
+  // --- Right ---
+
+  "network": {
+    "format-ethernet": "<span size='150%' rise='-2000'>󰈀</span>",
+    "format-wifi": "<span size='150%' rise='-2000'>󰖩</span> {essid}",
+    "format-disconnected": "<span size='150%' rise='-2000'>󰖪</span>",
+    "tooltip": false
+  },
+
+  "battery": {
+    "format": "<span size='150%' rise='-2000'>{icon}</span> {capacity}%",
+    "format-icons": [ "󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹" ],
+    "tooltip": false
+  },
+
+  "wireplumber": {
+    "format": "<span size='150%' rise='-2000'>{icon}</span> {volume}%",
+    "format-muted": "<span size='150%' rise='-2000'>󰖁</span> Muted",
+    "format-icons": [ "󰕿", "󰖀", "󰕾" ],
+    "on-click": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.3",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-scroll-up": "",
+    "on-scroll-down": "",
+    "tooltip": false
+  },
+
+  "custom/menu": {
+    "format" : "<span size='150%' rise='-2000'>󰍜</span>",
+    "menu": "on-click",
+    "menu-file": "~/.config/waybar/menu.xml",
+    "menu-actions": {
+      "shutdown": "shutdown",
+      "reboot": "reboot",
+      "suspend": "systemctl suspend",
+      "hibernate": "systemctl hibernate"
+    },
+    "tooltip": false
+  }
+}

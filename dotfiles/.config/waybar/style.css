@@ -1,0 +1,53 @@
+* {
+  font-family: "Cascadia Code NF";
+  font-size: 13px;
+}
+
+menu, #waybar {
+  color: #F8F8F2;
+  background: #282A36;
+  border-radius: 5px;
+}
+
+menuitem {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+menuitem:hover {
+  background: #44475A;
+}
+
+#battery, #clock, #network, #wireplumber, #workspaces, #custom-menu {
+  margin: 7px;
+  padding: 0 10px;
+  background: #44475A;
+  border-radius: 5px;
+}
+
+#battery, #network, #wireplumber {
+  margin-right: 0;
+}
+
+#workspaces {
+  padding: 0;
+  background: none;
+}
+
+#workspaces button {
+  margin-right: 3px;
+  padding: 0 7px;
+  color: #F8F8F2;
+  background: #44475A;
+  border-radius: 5px;
+
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+#workspaces button.focused {
+  font-weight: bold;
+  color: #282A36;
+  background: #BD93F9;
+}

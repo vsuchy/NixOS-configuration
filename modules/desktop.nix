@@ -50,6 +50,13 @@ in
     useNautilus = false;
   };
 
+  # --- Waybar ---
+
+  programs.waybar = {
+    enable = true;
+    systemd.target = "niri.service";
+  };
+
   # --- Applications ---
 
   environment.systemPackages = with pkgs; [
