@@ -19,6 +19,7 @@ in
       ../../modules/base.nix
       ../../modules/console.nix
       ../../modules/desktop.nix
+      ../../modules/development.nix
     ];
 
     system.stateVersion = "26.05";
