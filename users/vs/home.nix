@@ -25,13 +25,22 @@
   };
 
   home.file = {
+    # --- Console ---
+
     ".vimrc".source = ../../dotfiles/.vimrc;
     ".config/fastfetch/config.jsonc".source = ../../dotfiles/.config/fastfetch/config.jsonc;
     ".config/nvim/init.lua".source = ../../dotfiles/.config/nvim/init.lua;
     ".config/vifm/vifmrc".source = ../../dotfiles/.config/vifm/vifmrc;
 
+    # --- Desktop ---
+
     ".config/ghostty/config".source = ../../dotfiles/.config/ghostty/config;
     ".config/niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
     ".config/waybar".source = ../../dotfiles/.config/waybar;
+
+    # --- Development ---
+
+    ".gemrc".source = ../../dotfiles/.gemrc;
+    ".npmrc".source = ../../dotfiles/.npmrc;
   };
 }
