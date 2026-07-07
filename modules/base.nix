@@ -13,6 +13,11 @@
 
   boot.plymouth.enable = true;
 
+  # --- Time ---
+
+  time.timeZone = "Europe/Bratislava";
+  services.timesyncd.enable = true;
+
   # --- Localization ---
 
   console.keyMap = "us";
