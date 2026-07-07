@@ -26,8 +26,9 @@ in
 
   # --- Fonts ---
 
-  fonts.packages = [
-    pkgs.nerd-fonts.caskaydia-cove
+  fonts.packages = with pkgs; [
+    inter
+    nerd-fonts.caskaydia-cove
   ];
 
   fonts.fontconfig.localConf = ''
@@ -60,6 +61,7 @@ in
   # --- Applications ---
 
   environment.systemPackages = with pkgs; [
+    firefox
     ghostty
   ];
 }
