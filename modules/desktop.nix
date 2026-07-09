@@ -58,10 +58,16 @@ in
     systemd.target = "niri.service";
   };
 
-  # --- Applications ---
+  # --- Packages ---
 
   environment.systemPackages = with pkgs; [
+    # --- Applications ---
     firefox
     ghostty
+
+    # --- Theme ---
+    adw-gtk3
+    adwaita-icon-theme
+    numix-icon-theme-circle
   ];
 }
