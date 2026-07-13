@@ -1,37 +1,19 @@
+{ ... }:
+
 let
-  host = {
-    platform = "aarch64-linux";
-    disk = "/dev/nvme0n1";
-    hostname = "VSNixOSVM";
-    username = "vs";
-    userFullName = "Vlad Suchy";
-  };
+  disk = "/dev/nvme0n1";
 in
 
 {
-  inherit host;
+  imports = [
+    (import ./disko.nix { inherit disk; })
+    ./hardware-configuration.nix
+    ../../profiles/workstation.nix
+  ];
 
-  module = { ... }: {
-    imports = [
-      ./disko.nix
-      ./hardware-configuration.nix
+  system.stateVersion = "26.05";
 
-      ../../modules/base.nix
-      ../../modules/console.nix
-      ../../modules/desktop.nix
-      ../../modules/development.nix
-    ];
+  networking.hostName = "VSNixOSVM";
 
-    system.stateVersion = "26.05";
-
-    virtualisation.vmware.guest.enable = true;
-
-    home-manager.useGlobalPkgs = true;
-    home-manager.useUserPackages = true;
-    home-manager.extraSpecialArgs = { inherit host; };
-
-    home-manager.users = {
-      ${host.username} = import (../../users + "/${host.username}/home.nix");
-    };
-  };
+  virtualisation.vmware.guest.enable = true;
 }

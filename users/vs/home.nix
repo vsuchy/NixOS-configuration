@@ -1,10 +1,7 @@
-{ lib, host, ... }:
+{ lib, ... }:
 
 {
   home.stateVersion = "26.05";
-
-  home.username = host.username;
-  home.homeDirectory = "/home/${host.username}";
 
   programs.home-manager.enable = true;
 
@@ -20,7 +17,6 @@
       sudo = "sudo -E";
     };
 
-    enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 

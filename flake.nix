@@ -20,35 +20,29 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, disko, home-manager, ... }:
+  outputs = { nixpkgs, disko, home-manager, nixos-hardware, ... }:
 
   let
-    mkHost = path:
-
-      let
-        configuration = import path;
-        host = configuration.host;
-      in
-
+    mkHost = system: modules:
       nixpkgs.lib.nixosSystem {
-        system = host.platform;
+        inherit system;
 
         modules = [
-          configuration.module
           disko.nixosModules.disko
           home-manager.nixosModules.home-manager
-        ];
-        specialArgs = {
-          inherit inputs host;
-          disk = host.disk;
-        };
+        ] ++ modules;
       };
   in
 
   {
     nixosConfigurations = {
-      "thinkpad-p14s" = mkHost ./hosts/thinkpad-p14s/configuration.nix;
-      "vmware-fusion" = mkHost ./hosts/vmware-fusion/configuration.nix;
+      "thinkpad-p14s" = mkHost "x86_64-linux" [
+        nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen6
+        ./hosts/thinkpad-p14s/configuration.nix
+      ];
+      "vmware-fusion" = mkHost "aarch64-linux" [
+        ./hosts/vmware-fusion/configuration.nix
+      ];
     };
 
     apps.x86_64-linux.disko = {

@@ -33,6 +33,8 @@ This repository contains a flake-based NixOS configuration.
 |   |-- base.nix
 |   |-- desktop.nix
 |   |-- ...
+|-- profiles
+|   |-- workstation.nix
 |-- users
 |   |-- vs
 |       |-- home.nix
@@ -40,9 +42,11 @@ This repository contains a flake-based NixOS configuration.
     |-- ...
 ```
 
-Each host's `configuration.nix` defines its platform, hostname, default user,
-default disk, and NixOS module. The top-level flake exposes each host as a
-`nixosConfigurations` entry.
+Each host's `configuration.nix` is a regular NixOS module defining its hostname,
+target disk, state version, and hardware-specific settings. The top-level flake
+selects each host's platform and exposes it as a `nixosConfigurations` entry.
+The workstation profile composes the shared NixOS modules and Home Manager
+wiring used by both hosts.
 
 ## Disk Layout
 

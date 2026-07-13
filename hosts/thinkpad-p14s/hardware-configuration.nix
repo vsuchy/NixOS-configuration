@@ -1,4 +1,4 @@
-{ host, lib, ... }:
+{ lib, ... }:
 
 {
   # Placeholder only.
@@ -12,7 +12,7 @@
   # options but remove generated fileSystems, swapDevices, and duplicate
   # boot.initrd.luks.devices entries unless you intentionally reconcile them.
 
-  nixpkgs.hostPlatform = lib.mkDefault host.platform;
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   boot.initrd.availableKernelModules = lib.mkDefault [ "nvme" "sd_mod" "usb_storage" "xhci_pci" ];
   boot.kernelModules = [ "kvm-amd" ];
