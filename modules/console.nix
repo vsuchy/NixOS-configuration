@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgsUnstable, ... }:
 
 {
   # --- Packages ---
@@ -16,5 +16,7 @@
     neovim
     vifm
     vim
+
+    pkgsUnstable.codex
   ];
 }

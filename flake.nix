@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     disko = {
       url = "github:nix-community/disko";
@@ -20,12 +21,16 @@
     };
   };
 
-  outputs = { nixpkgs, disko, home-manager, nixos-hardware, ... }:
+  outputs = { nixpkgs, nixpkgs-unstable, disko, home-manager, nixos-hardware, ... }:
 
   let
     mkHost = system: modules:
       nixpkgs.lib.nixosSystem {
         inherit system;
+
+        specialArgs = {
+          pkgsUnstable = nixpkgs-unstable.legacyPackages.${system};
+        };
 
         modules = [
           disko.nixosModules.disko
