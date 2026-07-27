@@ -16,5 +16,4 @@ in
   networking.hostName = "VSNixOSTP";
 
   hardware.enableRedistributableFirmware = true;
-  hardware.cpu.amd.updateMicrocode = true;
 }

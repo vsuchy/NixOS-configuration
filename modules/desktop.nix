@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ config, pkgs, ... }:
 
 let
   niriSession = "${config.programs.niri.package}/bin/niri-session";
@@ -30,19 +30,6 @@ in
     inter
     nerd-fonts.caskaydia-cove
   ];
-
-  fonts.fontconfig.localConf = ''
-    <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
-    <fontconfig>
-      <alias binding="same">
-        <family>Cascadia Code NF</family>
-        <prefer>
-          <family>CaskaydiaCove NF</family>
-        </prefer>
-      </alias>
-    </fontconfig>
-    '';
 
   # --- Niri ---
 

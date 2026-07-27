@@ -65,17 +65,16 @@ lsblk -o NAME,SIZE,TYPE,MODEL,SERIAL,MOUNTPOINTS
 ls -l /dev/disk/by-id/
 ```
 
-Set the disk variable. This example is intentionally explicit:
+Both host configurations declare `/dev/nvme0n1` as their target disk. Set the
+installer variable to the same path:
 
 ```sh
 export DISK=/dev/nvme0n1
 ```
 
-Prefer a stable `/dev/disk/by-id/...` path when available:
-
-```sh
-export DISK=/dev/disk/by-id/nvme-REPLACE_WITH_THE_TARGET_DISK
-```
+If the target disk has a different device path, update the `disk` value in the
+selected host's `configuration.nix` before continuing, then set `DISK` to that
+same value.
 
 Check one last time:
 
@@ -166,8 +165,8 @@ For `vmware-fusion` on a Mac with Apple silicon, use an `aarch64-linux` NixOS
 ISO. This host uses Disko with the same btrfs subvolume layout as
 `thinkpad-p14s`, but without LUKS encryption and with a 16 GiB swap partition.
 
-Identify the VM disk carefully, then run the destructive Disko step against the
-VM host layout:
+Identify the VM disk carefully. The VM host configuration expects
+`/dev/nvme0n1`; use the same path for the destructive Disko step:
 
 ```sh
 export DISK=/dev/nvme0n1

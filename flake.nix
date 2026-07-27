@@ -26,8 +26,6 @@
   let
     mkHost = system: modules:
       nixpkgs.lib.nixosSystem {
-        inherit system;
-
         specialArgs = {
           pkgsUnstable = nixpkgs-unstable.legacyPackages.${system};
         };

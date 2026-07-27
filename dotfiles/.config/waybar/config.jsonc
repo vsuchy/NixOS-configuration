@@ -38,7 +38,7 @@
 
   "battery": {
     "format": "<span size='150%' rise='-2000'>{icon}</span> {capacity}%",
-    "format-icons": [ "󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹" ],
+    "format-icons": [ "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹" ],
     "tooltip": false
   },
 

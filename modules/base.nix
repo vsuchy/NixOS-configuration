@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];;
 
   # --- Boot ---
 
@@ -18,11 +18,22 @@
 
   # --- Networking ---
 
-  networking.networkmanager.enable = true;
+  networking = {
+    modemmanager.enable = false;
+    networkmanager.enable = true;
+  };
 
   # --- Shell ---
 
   programs.zsh.enable = true;
+
+  # --- Documentation ---
+
+  documentation = {
+    doc.enable = false;
+    info.enable = false;
+    nixos.enable = false;
+  };
 
   # --- Users ---
 

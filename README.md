@@ -16,15 +16,16 @@ This repository contains a flake-based NixOS configuration.
 ## Structure
 
 ```text
+.
 |-- flake.nix
 |-- flake.lock
 |-- README.md
 |-- INSTALL.md
 |-- hosts
 |   |-- thinkpad-p14s
-|       |-- configuration.nix
-|       |-- disko.nix
-|       |-- hardware-configuration.nix
+|   |   |-- configuration.nix
+|   |   |-- disko.nix
+|   |   |-- hardware-configuration.nix
 |   |-- vmware-fusion
 |       |-- configuration.nix
 |       |-- disko.nix
