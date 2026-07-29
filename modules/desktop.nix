@@ -45,12 +45,19 @@ in
     systemd.target = "niri.service";
   };
 
+  # --- Gtklock ---
+
+  programs.gtklock.enable = true;
+
   # --- Packages ---
 
   environment.systemPackages = with pkgs; [
     # --- Applications ---
     firefox
     ghostty
+
+    # --- Utilities ---
+    swayidle
 
     # --- Theme ---
     adw-gtk3

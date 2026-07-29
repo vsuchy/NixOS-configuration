@@ -24,6 +24,7 @@
 
     "ghostty/config".source = ../../dotfiles/.config/ghostty/config;
     "niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
+    "swayidle/config".source = ../../dotfiles/.config/swayidle/config;
     "waybar".source = ../../dotfiles/.config/waybar;
 
     # --- Theme ---
