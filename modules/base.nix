@@ -3,6 +3,14 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # --- Documentation ---
+
+  documentation = {
+    doc.enable = false;
+    info.enable = false;
+    nixos.enable = false;
+  };
+
   # --- Boot ---
 
   boot.loader.efi.canTouchEfiVariables = true;
@@ -26,14 +34,6 @@
   # --- Shell ---
 
   programs.zsh.enable = true;
-
-  # --- Documentation ---
-
-  documentation = {
-    doc.enable = false;
-    info.enable = false;
-    nixos.enable = false;
-  };
 
   # --- Users ---
 

@@ -5,6 +5,7 @@
 --- Local aliases ---
 
 local api = vim.api
+local bo = vim.bo
 local cmd = vim.cmd
 local fn = vim.fn
 local g = vim.g
@@ -70,7 +71,7 @@ local group = api.nvim_create_augroup("UserConfigAutoCmds", { clear = true })
 api.nvim_create_autocmd("BufWritePre", {
   group = group,
   callback = function()
-    if not vim.bo.binary and vim.bo.filetype ~= "diff" then
+    if not bo.binary and bo.filetype ~= "diff" then
       cmd("retab")
 
       local view = fn.winsaveview()
@@ -209,7 +210,7 @@ require("render-markdown").setup({
 api.nvim_create_autocmd("FileType", {
   callback = function()
     pcall(vim.treesitter.start)
-    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
   end
 })
 
