@@ -84,283 +84,163 @@ api.nvim_create_autocmd("BufWritePre", {
 --- Plugins ---
 ---------------
 
---- mini.deps: Plugin manager ---
+--- mini.nvim: Library of independent modules ---
 
-local packages_path = fn.stdpath("data") .. "/site/"
-local mini_path = packages_path .. "pack/deps/start/mini.nvim"
+require("mini.move").setup({
+  mappings = {
+    up = "<S-Up>",
+    down = "<S-Down>",
+    left = "<S-Left>",
+    right = "<S-Right>",
 
-if not vim.uv.fs_stat(mini_path) then
-  cmd("echo 'Installing mini.nvim' | redraw")
-
-  local clone_cmd = { "git", "clone", "--filter=blob:none", "--branch", "stable", "https://github.com/nvim-mini/mini.nvim", mini_path }
-
-  fn.system(clone_cmd)
-  cmd("packadd mini.nvim | helptags ALL")
-  cmd("echo 'Installed mini.nvim' | redraw")
-end
-
-require("mini.deps").setup({
-  path = {
-    package = packages_path
+    line_up = "<S-Up>",
+    line_down = "<S-Down>",
+    line_left = "<S-Left>",
+    line_right = "<S-Right>"
   }
 })
 
-local add = MiniDeps.add
-local later = MiniDeps.later
-local now = MiniDeps.now
+require("mini.pick").setup({
+  window = {
+    config = function()
+      local ui = api.nvim_list_uis()[1]
+      local width = math.floor(ui.width * 0.75)
+      local height = math.floor(ui.height * 0.75)
 
---- mini.nvim: Library of independent modules ---
+      return {
+        relative = "editor",
+        anchor = "NW",
+        width = width,
+        height = height,
+        col = math.floor((ui.width - width) / 2),
+        row = math.floor((ui.height - height) / 2)
+      }
+    end
+  }
+})
 
-later(function()
-  require("mini.move").setup({
-    mappings = {
-      up = "<S-Up>",
-      down = "<S-Down>",
-      left = "<S-Left>",
-      right = "<S-Right>",
-
-      line_up = "<S-Up>",
-      line_down = "<S-Down>",
-      line_left = "<S-Left>",
-      line_right = "<S-Right>"
-    }
-  })
-
-  require("mini.pick").setup({
-    window = {
-      config = function()
-        local ui = api.nvim_list_uis()[1]
-        local width = math.floor(ui.width * 0.75)
-        local height = math.floor(ui.height * 0.75)
-
-        return {
-          relative = "editor",
-          anchor = "NW",
-          width = width,
-          height = height,
-          col = math.floor((ui.width - width) / 2),
-          row = math.floor((ui.height - height) / 2)
-        }
-      end
-    }
-  })
-
-  require("mini.extra").setup({})
-  require("mini.pairs").setup({})
-  require("mini.splitjoin").setup({})
-  require("mini.surround").setup({})
-end)
+require("mini.extra").setup({})
+require("mini.pairs").setup({})
+require("mini.splitjoin").setup({})
+require("mini.surround").setup({})
 
 --- dracula.nvim: Dracula colorscheme ---
 
-now(function()
-  add({
-    source = "Mofiqul/dracula.nvim",
-    checkout = "ae752c1"
-  })
+require("dracula").setup({
+  italic_comment = true
+})
 
-  require("dracula").setup({
-    italic_comment = true
-  })
-
-  cmd("colorscheme dracula")
-end)
-
---- LSP Setup ---
-
-now(function()
-  --- LSP configuration ---
-
-  local lsp = vim.lsp
-
-  lsp.log.set_level(vim.log.levels.OFF)
-
-  lsp.config("*", { root_markers = { ".git" } })
-
-  lsp.config("bashls", {
-    cmd = { "bash-language-server", "start" },
-    filetypes = { "bash", "sh" }
-  })
-
-  lsp.config("jsonls", {
-    cmd = { "vscode-json-language-server", "--stdio" },
-    filetypes = { "json", "jsonc" }
-  })
-
-  lsp.config("lua_ls", {
-    cmd = { "lua-language-server" },
-    filetypes = { "lua" },
-    root_markers = { ".luarc.json" }
-  })
-
-  lsp.config("rubocop", {
-    cmd = { "rubocop", "--lsp" },
-    filetypes = { "ruby" },
-    root_markers = { "Gemfile" }
-  })
-
-  lsp.enable({ "bashls", "jsonls", "lua_ls", "rubocop" })
-
-  --- mason.nvim: Easily install and manage LSP servers, ... ---
-
-  add({
-    source = "mason-org/mason.nvim",
-    checkout = "v2.2.1"
-  })
-
-  require("mason").setup({
-    log_level = vim.log.levels.OFF,
-
-    ui = {
-      check_outdated_packages_on_open = false
-    }
-  })
-
-  --- Install LSP packages ---
-
-  local registry = require("mason-registry")
-  registry.refresh()
-
-  local function ensure_installed(package)
-    if not registry.is_installed(package) then
-      local p = registry.get_package(package)
-      p:install()
-    end
-  end
-
-  ensure_installed("bash-language-server")
-  ensure_installed("shellcheck")
-  ensure_installed("json-lsp")
-  ensure_installed("lua-language-server")
-  ensure_installed("rubocop")
-end)
-
---- nvim-treesitter: Treesitter configurations and abstraction layer ---
-
-later(function()
-  add({
-    source = "nvim-treesitter/nvim-treesitter",
-    checkout = "4916d65",
-    hooks = { post_checkout = function() cmd("TSUpdate") end }
-  })
-
-  api.nvim_create_autocmd("FileType", {
-    callback = function()
-      pcall(vim.treesitter.start)
-      vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-    end
-  })
-end)
+cmd("colorscheme dracula")
 
 --- blink.cmp: Completion plugin ---
 
-later(function()
-  add({
-    source = "saghen/blink.cmp",
-    checkout = "v1.10.2",
-    depends = {
-      {
-        source = "rafamadriz/friendly-snippets",
-        checkout = "6cd7280"
-      }
+require("blink.cmp").setup({
+  fuzzy = {
+    frecency = {
+      enabled = false
     }
-  })
-
-  require("blink.cmp").setup({
-    fuzzy = {
-      frecency = {
-        enabled = false
-      }
-    },
-    keymap = {
-      preset = "enter"
-    }
-  })
-end)
-
---- lualine.nvim: Statusline plugin ---
-
-later(function()
-  add({
-    source = "nvim-lualine/lualine.nvim",
-    checkout = "a905eee"
-  })
-
-  require("lualine").setup({
-    options = {
-      icons_enabled = false,
-      theme = "dracula-nvim"
-    },
-    sections = {
-      lualine_a = { "mode" },
-      lualine_b = { "filename" },
-      lualine_c = { "branch", "diff", "diagnostics" },
-      lualine_x = {},
-      lualine_y = { "encoding", "fileformat", "filetype" },
-      lualine_z = { "location" }
-    },
-    inactive_sections = {
-      lualine_a = { "filename" },
-      lualine_b = {},
-      lualine_c = {},
-      lualine_x = {},
-      lualine_y = {},
-      lualine_z = {}
-    },
-    tabline = {
-      lualine_z = { "buffers" }
-    }
-  })
-end)
+  },
+  keymap = {
+    preset = "enter"
+  }
+})
 
 --- gitsigns.nvim: Git integration for buffers ---
 
-later(function()
-  add({
-    source = "lewis6991/gitsigns.nvim",
-    checkout = "v2.1.0"
-  })
-
-  require("gitsigns").setup({})
-end)
+require("gitsigns").setup({})
 
 --- grug-far.nvim: Find and replace ---
 
-later(function()
-  add({
-    source = "MagicDuck/grug-far.nvim",
-    checkout = "1.6.67"
-  })
+require("grug-far").setup({
+  windowCreationCommand = "split",
 
-  require("grug-far").setup({
-    windowCreationCommand = "split",
-
-    engines = {
-      ripgrep = {
-        placeholders = {
-          enabled = false
-        }
+  engines = {
+    ripgrep = {
+      placeholders = {
+        enabled = false
       }
-    },
-    helpLine = {
-      enabled = false
     }
-  })
-end)
+  },
+  helpLine = {
+    enabled = false
+  }
+})
+
+--- lualine.nvim: Statusline plugin ---
+
+require("lualine").setup({
+  options = {
+    icons_enabled = false,
+    theme = "dracula-nvim"
+  },
+  sections = {
+    lualine_a = { "mode" },
+    lualine_b = { "filename" },
+    lualine_c = { "branch", "diff", "diagnostics" },
+    lualine_x = {},
+    lualine_y = { "encoding", "fileformat", "filetype" },
+    lualine_z = { "location" }
+  },
+  inactive_sections = {
+    lualine_a = { "filename" },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {
+    lualine_z = { "buffers" }
+  }
+})
 
 --- render-markdown.nvim: Improve viewing markdown files ---
 
-later(function()
-  add({
-    source = "MeanderingProgrammer/render-markdown.nvim",
-    checkout = "v8.12.0"
-  })
-
-  require("render-markdown").setup({
-    completions = {
-      lsp = {
-        enabled = true
-      }
+require("render-markdown").setup({
+  completions = {
+    lsp = {
+      enabled = true
     }
-  })
-end)
+  }
+})
+
+--- nvim-treesitter: Treesitter configurations and abstraction layer ---
+
+api.nvim_create_autocmd("FileType", {
+  callback = function()
+    pcall(vim.treesitter.start)
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end
+})
+
+--- LSP Setup ---
+
+local lsp = vim.lsp
+
+lsp.log.set_level(vim.log.levels.OFF)
+
+lsp.config("*", { root_markers = { ".git" } })
+
+lsp.config("bashls", {
+  cmd = { "bash-language-server", "start" },
+  filetypes = { "bash", "sh" }
+})
+
+lsp.config("jsonls", {
+  cmd = { "vscode-json-language-server", "--stdio" },
+  filetypes = { "json", "jsonc" }
+})
+
+lsp.config("lua_ls", {
+  cmd = { "lua-language-server" },
+  filetypes = { "lua" },
+  root_markers = { ".luarc.json" }
+})
+
+lsp.config("rubocop", {
+  cmd = { "rubocop", "--lsp" },
+  filetypes = { "ruby" },
+  root_markers = { "Gemfile" }
+})
+
+lsp.enable({ "bashls", "jsonls", "lua_ls", "rubocop" })

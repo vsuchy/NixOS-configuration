@@ -13,7 +13,6 @@
 
     fastfetch
     git
-    neovim
     vifm
     vim
 
