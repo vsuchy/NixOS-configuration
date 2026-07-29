@@ -91,14 +91,8 @@ window-rule {
 window-rule {
   match app-id="org.gnome.Boxes"
 
-  //open-floating false
-  //open-fullscreen false
-  //open-maximized false
-  //open-maximized-to-edges false
-
-  //tiled-state true
-
   default-column-width { proportion 1.0; }
+  open-maximized-to-edges false
 }
 
 // --- Key Bindings ---

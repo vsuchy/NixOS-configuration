@@ -9,6 +9,7 @@ in
     (import ./disko.nix { inherit disk; })
     ./hardware-configuration.nix
     ../../profiles/workstation.nix
+    ../../modules/virtualization.nix
   ];
 
   system.stateVersion = "26.05";
