@@ -23,6 +23,7 @@
     # --- Desktop ---
 
     "ghostty/config".source = ../../dotfiles/.config/ghostty/config;
+    "mako/config".source = ../../dotfiles/.config/mako/config;
     "niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
     "swayidle/config".source = ../../dotfiles/.config/swayidle/config;
     "waybar".source = ../../dotfiles/.config/waybar;

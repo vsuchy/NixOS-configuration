@@ -57,6 +57,7 @@ in
     ghostty
 
     # --- Utilities ---
+    mako
     swayidle
 
     # --- Theme ---

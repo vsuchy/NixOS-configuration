@@ -1,5 +1,6 @@
 // --- Startup ---
 
+spawn-at-startup "mako"
 spawn-at-startup "swayidle" "-w"
 
 // --- General ---

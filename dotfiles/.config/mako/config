@@ -1,0 +1,20 @@
+format=<b>%a</b>\n%s\n<i>%b</i>
+icons=0
+
+font=Inter 11
+
+width=450
+padding=10,15
+
+text-color=#F8F8F2
+background-color=#282A36
+
+border-color=#BD93F9
+border-size=5
+border-radius=5
+
+[urgency=low]
+border-color=#6272A4
+
+[urgency=critical]
+border-color=#FF5555

@@ -5,6 +5,7 @@
 
   environment.systemPackages = with pkgs; [
     ast-grep
+    libnotify
     ripgrep
     unzip
     wget
