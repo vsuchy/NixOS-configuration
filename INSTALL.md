@@ -15,14 +15,6 @@ test -d /sys/firmware/efi && echo "UEFI boot confirmed"
 
 ## 2. Connect Wi-Fi
 
-Interactive setup:
-
-```sh
-nmtui
-```
-
-Or use `nmcli`:
-
 ```sh
 nmcli radio wifi on
 nmcli device wifi list
@@ -62,44 +54,29 @@ List disks carefully:
 
 ```sh
 lsblk -o NAME,SIZE,TYPE,MODEL,SERIAL,MOUNTPOINTS
-ls -l /dev/disk/by-id/
 ```
 
-Both host configurations declare `/dev/nvme0n1` as their target disk. Set the
-installer variable to the same path:
+Both host configurations declare `/dev/nvme0n1` as their target disk. If the
+target disk has a different device path, update the `disk` value in the selected
+host's `configuration.nix` before continuing.
+
+Confirm the target disk declared by the ThinkPad configuration:
 
 ```sh
-export DISK=/dev/nvme0n1
-```
-
-If the target disk has a different device path, update the `disk` value in the
-selected host's `configuration.nix` before continuing, then set `DISK` to that
-same value.
-
-Check one last time:
-
-```sh
-lsblk "$DISK"
+nix eval --raw .#nixosConfigurations.thinkpad-p14s.config.disko.devices.disk.main.device
+lsblk "$(nix eval --raw .#nixosConfigurations.thinkpad-p14s.config.disko.devices.disk.main.device)"
 ```
 
 ## 6. Partition, Encrypt, Format, And Mount With Disko
 
-The next command is destructive. It erases the selected disk.
-
-Do not run it until `DISK` points to the correct target disk.
-
-```sh
-echo "$DISK"
-lsblk "$DISK"
-```
+The next command is destructive. It erases the disk declared by the selected
+host configuration. Do not run it until that value points to the correct target
+disk.
 
 Run Disko from this repository's locked flake input:
 
 ```sh
-nix run .#disko -- \
-  --mode destroy,format,mount \
-  ./hosts/thinkpad-p14s/disko.nix \
-  --argstr disk "$DISK"
+nix run .#disko -- --mode destroy,format,mount --flake .#thinkpad-p14s
 ```
 
 ## 7. Generate Hardware Configuration
@@ -166,18 +143,15 @@ ISO. This host uses Disko with the same btrfs subvolume layout as
 `thinkpad-p14s`, but without LUKS encryption and with a 16 GiB swap partition.
 
 Identify the VM disk carefully. The VM host configuration expects
-`/dev/nvme0n1`; use the same path for the destructive Disko step:
+`/dev/nvme0n1`. If necessary, update its `disk` value, then confirm the evaluated
+target:
 
 ```sh
-export DISK=/dev/nvme0n1
-lsblk "$DISK"
+lsblk "$(nix eval --raw .#nixosConfigurations.vmware-fusion.config.disko.devices.disk.main.device)"
 ```
 
 ```sh
-nix run .#disko -- \
-  --mode destroy,format,mount \
-  ./hosts/vmware-fusion/disko.nix \
-  --argstr disk "$DISK"
+nix run .#disko -- --mode destroy,format,mount --flake .#vmware-fusion
 ```
 
 Generate the VM hardware configuration:

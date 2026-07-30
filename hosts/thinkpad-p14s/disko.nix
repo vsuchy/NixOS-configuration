@@ -85,7 +85,7 @@ in
   assertions = [
     {
       assertion = disk != "";
-      message = "Set a non-empty disk path, for example: --argstr disk /dev/nvme0n1";
+      message = "Set a non-empty disk path in the importing host configuration";
     }
   ];
 }

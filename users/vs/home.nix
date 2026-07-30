@@ -30,13 +30,13 @@
 
     # --- Theme ---
 
-    "gtk-3.0/gtk.css".source = builtins.fetchurl {
-      sha256 = "0zz1j8bjnq3pc0ndyczp5kvhz119mwc8w4z7swgy3ngy5zwbzxp6";
+    "gtk-3.0/gtk.css".source = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/lassekongo83/adw-colors/389dff2e6ae48438693473c97f0aac6a2fc019cf/themes/adw-dracula/gtk3-dark.css";
+      hash = "sha256-5va/+C/+2eEf1+cTjhivKYQP9yz3M98sYHdgKxeS4X8=";
     };
-    "gtk-4.0/gtk.css".source = builtins.fetchurl {
-      sha256 = "1gb11m6v0wf6waxbhg9kfafal6h4l82f76x39xwzq7lg3fp9g491";
+    "gtk-4.0/gtk.css".source = pkgs.fetchurl {
       url = "https://raw.githubusercontent.com/lassekongo83/adw-colors/389dff2e6ae48438693473c97f0aac6a2fc019cf/themes/adw-dracula/gtk4-dark.css";
+      hash = "sha256-IZGXrhuPHvx5T6Ob4wSiBBqqnHIzPbi64sZxsE0NYb0=";
     };
   };
 
@@ -52,10 +52,12 @@
       sudo = "sudo -E";
     };
 
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
+    autosuggestion = {
+      enable = true;
+      strategy = [ "history" "completion" ];
+    };
 
-    autosuggestion.strategy = [ "history" "completion" ];
+    syntaxHighlighting.enable = true;
   };
 
   # --- Neovim ---
@@ -93,6 +95,7 @@
 
     theme = {
       name = "adw-gtk3-dark";
+      package = pkgs.adw-gtk3;
     };
 
     font = {
@@ -102,11 +105,13 @@
 
     cursorTheme = {
       name = "Adwaita";
+      package = pkgs.adwaita-icon-theme;
       size = 24;
     };
 
     iconTheme = {
       name = "Numix-Circle";
+      package = pkgs.numix-icon-theme-circle;
     };
   };
 

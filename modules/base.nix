@@ -1,7 +1,10 @@
 { pkgs, ... }:
 
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix = {
+    channel.enable = false;
+    settings.experimental-features = [ "nix-command" "flakes" ];
+  };
 
   # --- Documentation ---
 
@@ -13,12 +16,18 @@
 
   # --- Boot ---
 
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.enable = true;
+  boot = {
+    kernelParams = [ "quiet" "udev.log_level=3" "rd.systemd.show_status=auto" ];
 
-  boot.kernelParams = [ "quiet" "udev.log_level=3" "rd.systemd.show_status=auto" ];
+    loader = {
+      efi.canTouchEfiVariables = true;
+      systemd-boot.enable = true;
 
-  boot.plymouth.enable = true;
+      timeout = 0;
+    };
+
+    plymouth.enable = true;
+  };
 
   # --- Time ---
 
@@ -26,10 +35,7 @@
 
   # --- Networking ---
 
-  networking = {
-    modemmanager.enable = false;
-    networkmanager.enable = true;
-  };
+  networking.networkmanager.enable = true;
 
   # --- Shell ---
 
@@ -41,6 +47,7 @@
     description = "Vlad Suchy";
     isNormalUser = true;
     shell = pkgs.zsh;
+
     extraGroups = [ "networkmanager" "wheel" ];
   };
 

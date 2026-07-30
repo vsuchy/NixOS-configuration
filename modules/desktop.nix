@@ -19,7 +19,6 @@ in
 
       default_session = {
         command = "${pkgs.tuigreet}/bin/tuigreet --cmd ${niriSession}";
-        user = "greeter";
       };
     };
   };
@@ -31,38 +30,29 @@ in
     nerd-fonts.caskaydia-cove
   ];
 
-  # --- Niri ---
+  # --- Programs ---
 
-  programs.niri = {
-    enable = true;
-    useNautilus = false;
+  programs = {
+    niri = {
+      enable = true;
+      useNautilus = false;
+    };
+
+    gtklock.enable = true;
+
+    waybar = {
+      enable = true;
+      systemd.target = "niri.service";
+    };
   };
-
-  # --- Waybar ---
-
-  programs.waybar = {
-    enable = true;
-    systemd.target = "niri.service";
-  };
-
-  # --- Gtklock ---
-
-  programs.gtklock.enable = true;
 
   # --- Packages ---
 
   environment.systemPackages = with pkgs; [
-    # --- Applications ---
-    firefox
-    ghostty
-
-    # --- Utilities ---
     mako
     swayidle
 
-    # --- Theme ---
-    adw-gtk3
-    adwaita-icon-theme
-    numix-icon-theme-circle
+    firefox
+    ghostty
   ];
 }

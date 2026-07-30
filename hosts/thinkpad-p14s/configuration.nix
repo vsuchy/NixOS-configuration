@@ -8,13 +8,13 @@ in
   imports = [
     (import ./disko.nix { inherit disk; })
     ./hardware-configuration.nix
+
     ../../profiles/workstation.nix
     ../../modules/virtualization.nix
   ];
 
-  system.stateVersion = "26.05";
-
   networking.hostName = "VSNixOSTP";
+  system.stateVersion = "26.05";
 
   hardware.enableRedistributableFirmware = true;
 }

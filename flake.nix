@@ -24,11 +24,9 @@
   outputs = { nixpkgs, nixpkgs-unstable, disko, home-manager, nixos-hardware, ... }:
 
   let
-    mkHost = system: modules:
+    mkHost = modules:
       nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          pkgsUnstable = nixpkgs-unstable.legacyPackages.${system};
-        };
+        specialArgs = { inherit nixpkgs-unstable; };
 
         modules = [
           disko.nixosModules.disko
@@ -39,11 +37,11 @@
 
   {
     nixosConfigurations = {
-      "thinkpad-p14s" = mkHost "x86_64-linux" [
+      "thinkpad-p14s" = mkHost [
         nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen6
         ./hosts/thinkpad-p14s/configuration.nix
       ];
-      "vmware-fusion" = mkHost "aarch64-linux" [
+      "vmware-fusion" = mkHost [
         ./hosts/vmware-fusion/configuration.nix
       ];
     };

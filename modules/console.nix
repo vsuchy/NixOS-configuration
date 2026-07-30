@@ -1,4 +1,8 @@
-{ pkgs, pkgsUnstable, ... }:
+{ pkgs, nixpkgs-unstable, ... }:
+
+let
+  pkgsUnstable = nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+in
 
 {
   # --- Packages ---
