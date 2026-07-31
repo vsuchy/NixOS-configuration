@@ -45,9 +45,9 @@ This repository contains a flake-based NixOS configuration.
 
 Each host's `configuration.nix` is a regular NixOS module defining its hostname,
 target disk, state version, and hardware-specific settings. The top-level flake
-selects each host's platform and exposes it as a `nixosConfigurations` entry.
-The workstation profile composes the shared NixOS modules and Home Manager
-wiring used by both hosts.
+composes each host and exposes it as a `nixosConfigurations` entry, while its
+`hardware-configuration.nix` declares the host platform. The workstation profile
+composes the shared NixOS modules and Home Manager wiring used by both hosts.
 
 ## Disk Layout
 

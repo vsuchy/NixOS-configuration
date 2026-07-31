@@ -54,7 +54,10 @@
 
     autosuggestion = {
       enable = true;
-      strategy = [ "history" "completion" ];
+      strategy = [
+        "history"
+        "completion"
+      ];
     };
 
     syntaxHighlighting.enable = true;

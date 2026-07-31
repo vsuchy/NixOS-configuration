@@ -21,41 +21,56 @@
     };
   };
 
-  outputs = { nixpkgs, nixpkgs-unstable, disko, home-manager, nixos-hardware, ... }:
+  outputs =
+    {
+      nixpkgs,
+      nixpkgs-unstable,
+      disko,
+      home-manager,
+      nixos-hardware,
+      ...
+    }:
 
-  let
-    mkHost = modules:
-      nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit nixpkgs-unstable; };
+    let
+      mkHost =
+        modules:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit nixpkgs-unstable; };
 
-        modules = [
-          disko.nixosModules.disko
-          home-manager.nixosModules.home-manager
-        ] ++ modules;
+          modules = [
+            disko.nixosModules.disko
+            home-manager.nixosModules.home-manager
+          ]
+          ++ modules;
+        };
+    in
+
+    {
+      nixosConfigurations = {
+        "thinkpad-p14s" = mkHost [
+          nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen6
+          ./hosts/thinkpad-p14s/configuration.nix
+        ];
+        "vmware-fusion" = mkHost [
+          ./hosts/vmware-fusion/configuration.nix
+        ];
       };
-  in
 
-  {
-    nixosConfigurations = {
-      "thinkpad-p14s" = mkHost [
-        nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen6
-        ./hosts/thinkpad-p14s/configuration.nix
-      ];
-      "vmware-fusion" = mkHost [
-        ./hosts/vmware-fusion/configuration.nix
-      ];
-    };
+      formatter = nixpkgs.lib.genAttrs [
+        "x86_64-linux"
+        "aarch64-linux"
+      ] (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
 
-    apps.x86_64-linux.disko = {
-      type = "app";
-      program = "${disko.packages.x86_64-linux.disko}/bin/disko";
-      meta.description = "Run Disko from the locked flake input";
-    };
+      apps.x86_64-linux.disko = {
+        type = "app";
+        program = "${disko.packages.x86_64-linux.disko}/bin/disko";
+        meta.description = "Run Disko from the locked flake input";
+      };
 
-    apps.aarch64-linux.disko = {
-      type = "app";
-      program = "${disko.packages.aarch64-linux.disko}/bin/disko";
-      meta.description = "Run Disko from the locked flake input";
+      apps.aarch64-linux.disko = {
+        type = "app";
+        program = "${disko.packages.aarch64-linux.disko}/bin/disko";
+        meta.description = "Run Disko from the locked flake input";
+      };
     };
-  };
 }

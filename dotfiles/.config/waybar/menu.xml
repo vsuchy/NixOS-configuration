@@ -17,7 +17,7 @@
       </object>
     </child>
     <child>
-      <object id="shutdown" class="GtkMenuItem">
+      <object id="poweroff" class="GtkMenuItem">
         <property name="label">Shutdown</property>
       </object>
     </child>

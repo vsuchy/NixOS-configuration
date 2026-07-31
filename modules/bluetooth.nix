@@ -2,7 +2,8 @@
 
 {
   hardware.bluetooth.enable = true;
-  security.rtkit.enable = true;
+
+  # --- Packages ---
 
   environment.systemPackages = with pkgs; [
     bluetui

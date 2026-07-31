@@ -3,7 +3,10 @@
 {
   nix = {
     channel.enable = false;
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   # --- Documentation ---
@@ -17,7 +20,11 @@
   # --- Boot ---
 
   boot = {
-    kernelParams = [ "quiet" "udev.log_level=3" "rd.systemd.show_status=auto" ];
+    kernelParams = [
+      "quiet"
+      "udev.log_level=3"
+      "rd.systemd.show_status=auto"
+    ];
 
     loader = {
       efi.canTouchEfiVariables = true;
@@ -48,7 +55,10 @@
     isNormalUser = true;
     shell = pkgs.zsh;
 
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
   };
 
   security.sudo.wheelNeedsPassword = false;

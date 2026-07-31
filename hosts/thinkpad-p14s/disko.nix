@@ -1,7 +1,10 @@
 { disk, ... }:
 
 let
-  btrfsOptions = [ "compress=zstd" "noatime" ];
+  btrfsOptions = [
+    "compress=zstd"
+    "noatime"
+  ];
 in
 
 {
@@ -21,7 +24,12 @@ in
               format = "vfat";
               mountpoint = "/boot";
               mountOptions = [ "umask=0077" ];
-              extraArgs = [ "-F" "32" "-n" "BOOT" ];
+              extraArgs = [
+                "-F"
+                "32"
+                "-n"
+                "BOOT"
+              ];
             };
           };
 
@@ -32,11 +40,17 @@ in
               type = "luks";
               name = "cryptswap";
               settings.allowDiscards = true;
-              extraFormatArgs = [ "--type" "luks2" ];
+              extraFormatArgs = [
+                "--type"
+                "luks2"
+              ];
               content = {
                 type = "swap";
                 resumeDevice = true;
-                extraArgs = [ "-L" "SWAP" ];
+                extraArgs = [
+                  "-L"
+                  "SWAP"
+                ];
               };
             };
           };
@@ -48,10 +62,17 @@ in
               type = "luks";
               name = "cryptroot";
               settings.allowDiscards = true;
-              extraFormatArgs = [ "--type" "luks2" ];
+              extraFormatArgs = [
+                "--type"
+                "luks2"
+              ];
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" "-L" "ROOT" ];
+                extraArgs = [
+                  "-f"
+                  "-L"
+                  "ROOT"
+                ];
                 subvolumes = {
                   "@" = {
                     mountpoint = "/";

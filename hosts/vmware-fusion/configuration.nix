@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 let
   disk = "/dev/nvme0n1";

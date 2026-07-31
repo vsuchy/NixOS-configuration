@@ -5,6 +5,13 @@
 
   boot = {
     kernelModules = [ "kvm-amd" ];
-    initrd.availableKernelModules = [ "nvme" "sd_mod" "thunderbolt" "usb_storage" "usbhid" "xhci_pci" ];
+    initrd.availableKernelModules = [
+      "nvme"
+      "sd_mod"
+      "thunderbolt"
+      "usb_storage"
+      "usbhid"
+      "xhci_pci"
+    ];
   };
 }

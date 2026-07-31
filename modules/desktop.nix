@@ -23,6 +23,10 @@ in
     };
   };
 
+  # --- Audio ---
+
+  security.rtkit.enable = true;
+
   # --- Fonts ---
 
   fonts.packages = with pkgs; [

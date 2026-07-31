@@ -1,7 +1,10 @@
 { disk, ... }:
 
 let
-  btrfsOptions = [ "compress=zstd" "noatime" ];
+  btrfsOptions = [
+    "compress=zstd"
+    "noatime"
+  ];
 in
 
 {
@@ -21,7 +24,12 @@ in
               format = "vfat";
               mountpoint = "/boot";
               mountOptions = [ "umask=0077" ];
-              extraArgs = [ "-F" "32" "-n" "BOOT" ];
+              extraArgs = [
+                "-F"
+                "32"
+                "-n"
+                "BOOT"
+              ];
             };
           };
 
@@ -30,7 +38,10 @@ in
             size = "16G";
             content = {
               type = "swap";
-              extraArgs = [ "-L" "SWAP" ];
+              extraArgs = [
+                "-L"
+                "SWAP"
+              ];
             };
           };
 
@@ -39,7 +50,11 @@ in
             size = "100%";
             content = {
               type = "btrfs";
-              extraArgs = [ "-f" "-L" "ROOT" ];
+              extraArgs = [
+                "-f"
+                "-L"
+                "ROOT"
+              ];
               subvolumes = {
                 "@" = {
                   mountpoint = "/";
