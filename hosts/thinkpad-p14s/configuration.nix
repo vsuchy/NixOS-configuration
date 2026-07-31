@@ -10,6 +10,7 @@ in
     ./hardware-configuration.nix
 
     ../../profiles/workstation.nix
+    ../../modules/bluetooth.nix
     ../../modules/virtualization.nix
   ];
 
