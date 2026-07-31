@@ -26,8 +26,9 @@ in
   # --- Fonts ---
 
   fonts.packages = with pkgs; [
+    cascadia-code
+    font-awesome
     inter
-    nerd-fonts.caskaydia-cove
   ];
 
   # --- Programs ---

@@ -11,7 +11,7 @@
 
   "modules-left": [ "niri/workspaces" ],
   "modules-center": [ "clock" ],
-  "modules-right": [ "network", "battery", "wireplumber", "custom/menu" ],
+  "modules-right": [ "battery", "network", "wireplumber", "custom/menu" ],
 
   // --- Left ---
 
@@ -29,23 +29,23 @@
 
   // --- Right ---
 
-  "network": {
-    "format-ethernet": "<span size='150%' rise='-2000'>󰈀</span>",
-    "format-wifi": "<span size='150%' rise='-2000'>󰖩</span> {essid}",
-    "format-disconnected": "<span size='150%' rise='-2000'>󰖪</span>",
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-icons": [ "\uf244", "\uf243", "\uf242", "\uf241", "\uf240" ],
     "tooltip": false
   },
 
-  "battery": {
-    "format": "<span size='150%' rise='-2000'>{icon}</span> {capacity}%",
-    "format-icons": [ "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹" ],
+  "network": {
+    "format-ethernet": "\uf6ff",
+    "format-wifi": "\uf1eb {essid}",
+    "format-disconnected": "\uf1eb Disconnected",
     "tooltip": false
   },
 
   "wireplumber": {
-    "format": "<span size='150%' rise='-2000'>{icon}</span> {volume}%",
-    "format-muted": "<span size='150%' rise='-2000'>󰖁</span> Muted",
-    "format-icons": [ "󰕿", "󰖀", "󰕾" ],
+    "format": "{icon} {volume}%",
+    "format-muted": "\uf6a9 Muted",
+    "format-icons": [ "\uf027", "\uf6a8", "\uf028" ],
     "on-click": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.3",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "on-scroll-up": "",
@@ -54,12 +54,12 @@
   },
 
   "custom/menu": {
-    "format": "<span size='150%' rise='-2000'>󰍜</span>",
+    "format": "\uf011",
     "menu": "on-click",
     "menu-file": "~/.config/waybar/menu.xml",
     "menu-actions": {
-      "shutdown": "shutdown",
-      "reboot": "reboot",
+      "poweroff": "systemctl poweroff",
+      "reboot": "systemctl reboot",
       "suspend": "systemctl suspend",
       "hibernate": "systemctl hibernate"
     },
