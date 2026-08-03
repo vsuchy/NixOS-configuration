@@ -1,6 +1,7 @@
 # NixOS Configuration
 
 This repository contains a flake-based NixOS configuration.
+See [INSTALL.md](./INSTALL.md) for the full installation procedure.
 
 ## Hosts
 
@@ -76,21 +77,42 @@ LUKS encryption:
 | Swap | `SWAP` | swap | swap device | 16 GiB |
 | Root | `ROOT` | btrfs | `/` | remaining space |
 
-## Routine Rebuild
+## Maintenance
 
-After installation:
+Run these commands from the repository root. The examples target
+`thinkpad-p14s`; use `.#vmware-fusion` for the VMware Fusion VM.
 
-```sh
-sudo nixos-rebuild switch --flake .#thinkpad-p14s
-```
+### Rebuild
 
-To check without switching:
+Validate the flake and activate the configuration:
 
 ```sh
 nix flake check
+sudo nixos-rebuild switch --flake .#thinkpad-p14s
+```
+
+To build the configuration without activating it:
+
+```sh
 sudo nixos-rebuild dry-build --flake .#thinkpad-p14s
 ```
 
-For the VMware Fusion VM, use `.#vmware-fusion` instead.
+### Update
 
-See [INSTALL.md](./INSTALL.md) for the full installation procedure.
+Update all flake inputs, validate the result, and rebuild:
+
+```sh
+nix flake update
+nix flake check
+sudo nixos-rebuild switch --flake .#thinkpad-p14s
+```
+
+### Cleanup
+
+Remove system and user generations older than 30 days and collect their unused
+store paths:
+
+```sh
+sudo nix-collect-garbage --delete-older-than 30d
+nix-collect-garbage --delete-older-than 30d
+```
