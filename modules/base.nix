@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  username,
+  ...
+}:
 
 {
   nix = {
@@ -50,7 +54,7 @@
 
   # --- Users ---
 
-  users.users.vs = {
+  users.users.${username} = {
     description = "Vlad Suchy";
     isNormalUser = true;
     shell = pkgs.zsh;

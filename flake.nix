@@ -33,9 +33,15 @@
 
     let
       mkHost =
-        modules:
+        {
+          modules,
+          username,
+        }:
+
         nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit nixpkgs-unstable; };
+          specialArgs = {
+            inherit nixpkgs-unstable username;
+          };
 
           modules = [
             disko.nixosModules.disko
@@ -47,30 +53,32 @@
 
     {
       nixosConfigurations = {
-        "thinkpad-p14s" = mkHost [
-          nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen6
-          ./hosts/thinkpad-p14s/configuration.nix
-        ];
-        "vmware-fusion" = mkHost [
-          ./hosts/vmware-fusion/configuration.nix
-        ];
+        "thinkpad-p14s" = mkHost {
+          username = "vs";
+          modules = [
+            nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen6
+            ./hosts/thinkpad-p14s/configuration.nix
+          ];
+        };
+        "vmware-fusion" = mkHost {
+          username = "vs";
+          modules = [
+            ./hosts/vmware-fusion/configuration.nix
+          ];
+        };
       };
+
+      apps = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system: {
+        disko = {
+          type = "app";
+          program = "${disko.packages.${system}.disko}/bin/disko";
+          meta.description = "Run Disko from the locked flake input";
+        };
+      });
 
       formatter = nixpkgs.lib.genAttrs [
         "x86_64-linux"
         "aarch64-linux"
       ] (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
-
-      apps.x86_64-linux.disko = {
-        type = "app";
-        program = "${disko.packages.x86_64-linux.disko}/bin/disko";
-        meta.description = "Run Disko from the locked flake input";
-      };
-
-      apps.aarch64-linux.disko = {
-        type = "app";
-        program = "${disko.packages.aarch64-linux.disko}/bin/disko";
-        meta.description = "Run Disko from the locked flake input";
-      };
     };
 }

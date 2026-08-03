@@ -1,4 +1,4 @@
-{ ... }:
+{ username, ... }:
 
 {
   imports = [
@@ -12,6 +12,6 @@
     useGlobalPkgs = true;
     useUserPackages = true;
 
-    users.vs = import ../users/vs/home.nix;
+    users.${username} = import (../users + "/${username}/home.nix");
   };
 }

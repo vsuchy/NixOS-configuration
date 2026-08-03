@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  username,
+  ...
+}:
 
 let
   niriSession = "${config.programs.niri.package}/bin/niri-session";
@@ -14,7 +19,7 @@ in
     settings = {
       initial_session = {
         command = niriSession;
-        user = "vs";
+        user = username;
       };
 
       default_session = {
