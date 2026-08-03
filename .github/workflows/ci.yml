@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Evaluate and lint
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Evaluate both hosts
+        run: nix flake check --all-systems --no-build
+
+      - name: Check formatting
+        run: nix develop .#ci --command treefmt --ci
+
+      - name: Run Statix
+        run: nix develop .#ci --command statix check .
+
+      - name: Run deadnix
+        run: nix develop .#ci --command deadnix --fail .
+
+  build:
+    name: Build ${{ matrix.host }} (${{ matrix.system }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: thinkpad-p14s
+            system: x86_64-linux
+            runner: ubuntu-24.04
+          - host: vmware-fusion
+            system: aarch64-linux
+            runner: ubuntu-24.04-arm
+
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Verify native architecture
+        run: test "$(nix eval --impure --raw --expr builtins.currentSystem)" = "${{ matrix.system }}"
+
+      - name: Build host
+        run: nix build --no-link --print-build-logs ".#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel"

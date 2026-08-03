@@ -32,6 +32,11 @@
     }:
 
     let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+
       mkHost =
         {
           modules,
@@ -68,7 +73,7 @@
         };
       };
 
-      apps = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" ] (system: {
+      apps = nixpkgs.lib.genAttrs systems (system: {
         disko = {
           type = "app";
           program = "${disko.packages.${system}.disko}/bin/disko";
@@ -76,9 +81,16 @@
         };
       });
 
-      formatter = nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-        "aarch64-linux"
-      ] (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
+      devShells = nixpkgs.lib.genAttrs systems (system: {
+        ci = nixpkgs.legacyPackages.${system}.mkShellNoCC {
+          packages = with nixpkgs.legacyPackages.${system}; [
+            deadnix
+            nixfmt-tree
+            statix
+          ];
+        };
+      });
+
+      formatter = nixpkgs.lib.genAttrs systems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
     };
 }
