@@ -55,6 +55,7 @@ in
 
   environment.systemPackages = with pkgs; [
     mako
+    swaybg
     swayidle
 
     firefox

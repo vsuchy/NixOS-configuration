@@ -2,6 +2,7 @@
 
 spawn-at-startup "mako"
 spawn-at-startup "swayidle" "-w"
+spawn-sh-at-startup "swaybg -m fill -i ~/.config/wallpapers/nixos_dracula.svg"
 
 // --- General ---
 

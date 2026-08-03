@@ -26,6 +26,7 @@
     "mako/config".source = ../../dotfiles/.config/mako/config;
     "niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
     "swayidle/config".source = ../../dotfiles/.config/swayidle/config;
+    "wallpapers".source = ../../dotfiles/.config/wallpapers;
     "waybar".source = ../../dotfiles/.config/waybar;
 
     # --- Theme ---
@@ -49,7 +50,7 @@
 
     shellAliases = {
       ls = "LC_ALL=C ls -Ahl --color=always --group-directories-first --time-style=+'%Y-%m-%d %H:%M:%S'";
-      sudo = "sudo -E";
+      sudoe = "sudo -E";
     };
 
     autosuggestion = {
