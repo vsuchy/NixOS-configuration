@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   home.stateVersion = "26.05";
@@ -47,11 +47,18 @@
     enable = true;
 
     initContent = "PROMPT='%F{blue}%~%f %F{green}❯%f '";
+    history.path = "${config.xdg.dataHome}/zsh/.zsh_history";
 
     shellAliases = {
       ls = "LC_ALL=C ls -Ahl --color=always --group-directories-first --time-style=+'%Y-%m-%d %H:%M:%S'";
       sudoe = "sudo -E";
     };
+
+    completionInit = ''
+      mkdir -p "${config.xdg.dataHome}/zsh"
+      autoload -U compinit
+      compinit -d "${config.xdg.dataHome}/zsh/.zcompdump"
+    '';
 
     autosuggestion = {
       enable = true;
