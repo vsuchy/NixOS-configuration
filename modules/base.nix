@@ -32,9 +32,12 @@
 
     loader = {
       efi.canTouchEfiVariables = true;
-      systemd-boot.enable = true;
-
       timeout = 0;
+
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 5;
+      };
     };
 
     plymouth.enable = true;
