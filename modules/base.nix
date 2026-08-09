@@ -51,6 +51,21 @@
 
   networking.networkmanager.enable = true;
 
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+  };
+
+  # --- Printing ---
+
+  services.printing = {
+    enable = true;
+
+    drivers = with pkgs; [
+      brlaser
+    ];
+  };
+
   # --- Shell ---
 
   programs.zsh.enable = true;
