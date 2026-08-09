@@ -11,6 +11,7 @@ in
 
     ../../profiles/workstation.nix
     ../../modules/bluetooth.nix
+    ../../modules/tailscale.nix
     ../../modules/virtualization.nix
   ];
 
