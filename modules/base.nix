@@ -13,6 +13,8 @@
     ];
   };
 
+  nixpkgs.config.allowUnfree = true;
+
   # --- Documentation ---
 
   documentation = {

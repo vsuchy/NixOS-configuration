@@ -65,5 +65,6 @@ in
 
     firefox
     ghostty
+    obsidian
   ];
 }
