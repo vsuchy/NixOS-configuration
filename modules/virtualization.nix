@@ -5,9 +5,13 @@
 }:
 
 {
+  virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
 
-  users.users.${username}.extraGroups = [ "libvirtd" ];
+  users.users.${username}.extraGroups = [
+    "docker"
+    "libvirtd"
+  ];
 
   # --- Packages ---
 
