@@ -101,7 +101,8 @@ window-rule {
 binds {
   Super+Alt+1 { spawn "firefox"; }
   Super+Alt+2 { spawn "ghostty"; }
-  Super+Alt+3 { spawn "gnome-boxes"; }
+  Super+Alt+3 { spawn "obsidian"; }
+  Super+Alt+4 { spawn "gnome-boxes"; }
 
   Super+Q { close-window; }
 
@@ -139,6 +140,9 @@ binds {
   Super+Ctrl+1 { move-column-to-workspace 1; }
   Super+Ctrl+2 { move-column-to-workspace 2; }
   Super+Ctrl+3 { move-column-to-workspace 3; }
+
+  Super+Shift+M { focus-monitor-next; }
+  Super+Ctrl+M { move-column-to-monitor-next; }
 
   Super+Ctrl+Q { quit; }
 }
