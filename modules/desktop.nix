@@ -49,22 +49,5 @@ in
     };
 
     gtklock.enable = true;
-
-    waybar = {
-      enable = true;
-      systemd.target = "niri.service";
-    };
   };
-
-  # --- Packages ---
-
-  environment.systemPackages = with pkgs; [
-    mako
-    swaybg
-    swayidle
-
-    firefox
-    ghostty
-    obsidian
-  ];
 }

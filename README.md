@@ -22,6 +22,10 @@ See [INSTALL.md](./INSTALL.md) for the full installation procedure.
 |-- flake.lock
 |-- README.md
 |-- INSTALL.md
+|-- home
+|   |-- default.nix
+|   |-- modules
+|       |-- ...
 |-- hosts
 |   |-- thinkpad-p14s
 |   |   |-- configuration.nix
@@ -32,14 +36,9 @@ See [INSTALL.md](./INSTALL.md) for the full installation procedure.
 |       |-- disko.nix
 |       |-- hardware-configuration.nix
 |-- modules
-|   |-- base.nix
-|   |-- desktop.nix
 |   |-- ...
 |-- profiles
 |   |-- workstation.nix
-|-- users
-|   |-- vs
-|       |-- home.nix
 |-- dotfiles
     |-- ...
 ```
@@ -48,7 +47,9 @@ Each host's `configuration.nix` is a regular NixOS module defining its hostname,
 target disk, state version, and hardware-specific settings. The top-level flake
 composes each host and exposes it as a `nixosConfigurations` entry, while its
 `hardware-configuration.nix` declares the host platform. The workstation profile
-composes the shared NixOS modules and Home Manager wiring used by both hosts.
+composes the shared NixOS modules and attaches the generic Home Manager profile
+to the configured user. The Home Manager profile composes its console, desktop,
+and development modules independently of the user's name.
 
 ## Disk Layout
 

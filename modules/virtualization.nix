@@ -5,18 +5,17 @@
 }:
 
 {
-  virtualisation.docker.enable = true;
-  virtualisation.libvirtd.enable = true;
+  virtualisation = {
+    docker.enable = true;
+
+    libvirtd = {
+      enable = true;
+      qemu.package = pkgs.qemu_kvm;
+    };
+  };
 
   users.users.${username}.extraGroups = [
     "docker"
     "libvirtd"
-  ];
-
-  # --- Packages ---
-
-  environment.systemPackages = with pkgs; [
-    gnome-boxes
-    qemu_kvm
   ];
 }

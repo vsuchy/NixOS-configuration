@@ -1,3 +1,0 @@
-timeout 3600 "gtklock"
-before-sleep "gtklock"
-lock "gtklock"
