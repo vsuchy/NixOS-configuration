@@ -1,11 +1,14 @@
 # Installation Guide
 
-This guide installs NixOS `26.05` from the NixOS minimal ISO.
-It assumes UEFI boot and a single target disk.
+This guide installs `thinkpad-p14s` with NixOS `26.05` from the NixOS minimal
+ISO. It assumes UEFI boot, a TPM2 device, and a single target disk. The VMware
+host differences are covered at the end.
 
 ## 1. Boot The Installer
 
-Boot the NixOS minimal ISO in UEFI mode.
+Boot the NixOS minimal ISO in UEFI mode. Keep Secure Boot disabled while using
+the installer because the standard NixOS installation image is not signed.
+Leave TPM2 enabled.
 
 Confirm UEFI:
 
@@ -79,6 +82,10 @@ Run Disko from this repository's locked flake input:
 nix run .#disko -- --mode destroy,format,mount --flake .#thinkpad-p14s
 ```
 
+Disko asks for LUKS passphrases for both `ROOT` and `SWAP`. Use strong values
+and retain them as recovery credentials. TPM enrollment later adds keyslots; it
+does not replace these passphrase slots.
+
 ## 7. Generate Hardware Configuration
 
 Generate the hardware configuration:
@@ -99,7 +106,28 @@ resume configuration in this repository. Edit
 `fileSystems`, `swapDevices`, and duplicate `boot.initrd.luks.devices` entries
 unless you intentionally reconcile them with `hosts/thinkpad-p14s/disko.nix`.
 
-## 8. Install NixOS
+## 8. Create Secure Boot Keys
+
+Lanzaboote needs its signing keys while `nixos-install` installs the boot
+loader. Generate them directly in the mounted target, not in the installer's
+ephemeral `/var/lib`:
+
+```sh
+install -d -m 0700 /mnt/var/lib/sbctl
+sbctl_config="$(mktemp)"
+chmod 0600 "$sbctl_config"
+printf '%s\n' 'keydir: /mnt/var/lib/sbctl/keys' 'guid: /mnt/var/lib/sbctl/GUID' > "$sbctl_config"
+nix shell nixpkgs#sbctl --command sbctl --config "$sbctl_config" create-keys
+rm -f "$sbctl_config"
+unset sbctl_config
+test -r /mnt/var/lib/sbctl/keys/db/db.key
+```
+
+The private keys remain under `/var/lib/sbctl` on the installed, encrypted
+system. Make an encrypted offline backup after installation and never add them
+to this repository.
+
+## 9. Install NixOS
 
 Run a dry evaluation first:
 
@@ -136,11 +164,98 @@ Reboot:
 reboot
 ```
 
+Keep Secure Boot disabled for this first boot. Unlock `ROOT` and `SWAP` with
+their LUKS passphrases.
+
+## 10. Enroll Secure Boot Keys
+
+First confirm that Lanzaboote signed the installed EFI images:
+
+```sh
+sudo sbctl status
+sudo sbctl verify
+```
+
+Enter the ThinkPad firmware settings:
+
+```sh
+systemctl reboot --firmware-setup
+```
+
+In the firmware, open **Security > Secure Boot**, enable Secure Boot, and choose
+**Reset to Setup Mode**. Do not choose **Clear All Secure Boot Keys**, because
+that also removes the forbidden-signature database. Save the settings and boot
+NixOS again, then enroll this machine's keys together with Microsoft's keys for
+firmware and option-ROM compatibility:
+
+```sh
+sudo sbctl enroll-keys --microsoft
+reboot
+```
+
+After rebooting, verify that enforcement is active and the boot files remain
+signed:
+
+```sh
+bootctl status
+sudo sbctl status
+sudo sbctl verify
+```
+
+`bootctl status` should report `Secure Boot: enabled (user)` and TPM2 support.
+
+## 11. Enroll TPM2 LUKS Unlocking
+
+Enroll TPM tokens only after booting once with Secure Boot active, so the
+managed PCR 7 measurements describe the enforced Secure Boot policy. Confirm
+that the TPM supports `systemd-pcrlock` and that Lanzaboote generated a policy:
+
+```sh
+/run/current-system/systemd/lib/systemd/systemd-pcrlock is-supported
+sudo test -s /var/lib/systemd/pcrlock.json && echo "PCR policy present"
+```
+
+The support check must print `yes`. Confirm that the `ROOT` and `SWAP`
+partlabels identify the intended disk, then add an unattended TPM2 token to
+each LUKS2 volume:
+
+```sh
+sudo systemd-cryptenroll \
+  --tpm2-device=auto \
+  --tpm2-pcrlock=/var/lib/systemd/pcrlock.json \
+  /dev/disk/by-partlabel/ROOT
+
+sudo systemd-cryptenroll \
+  --tpm2-device=auto \
+  --tpm2-pcrlock=/var/lib/systemd/pcrlock.json \
+  /dev/disk/by-partlabel/SWAP
+```
+
+Each command asks for that volume's existing LUKS passphrase and adds a token;
+it does not remove the passphrase.
+
+Inspect the `Tokens` and `Keyslots` sections before rebooting:
+
+```sh
+sudo cryptsetup luksDump /dev/disk/by-partlabel/ROOT
+sudo cryptsetup luksDump /dev/disk/by-partlabel/SWAP
+reboot
+```
+
+Both mappings should now unlock through the TPM. If the measured state does not
+match, the initrd asks for the retained LUKS passphrase. A normal
+`nixos-rebuild` updates the `systemd-pcrlock` policy without re-enrolling the
+volumes. After a TPM reset or when deliberately replacing a token, repeat the
+corresponding enrollment command with `--wipe-slot=tpm2`; enrollment completes
+before the old TPM slot is removed.
+
 ## VMware Fusion VM Notes
 
 For `vmware-fusion` on a Mac with Apple silicon, use an `aarch64-linux` NixOS
 ISO. This host uses Disko with the same btrfs subvolume layout as
 `thinkpad-p14s`, but without LUKS encryption and with a 16 GiB swap partition.
+It does not import Lanzaboote or configure TPM unlocking, so skip the Secure
+Boot key and TPM enrollment sections above.
 
 Identify the VM disk carefully. The VM host configuration expects
 `/dev/nvme0n1`. If necessary, update its `disk` value, then confirm the evaluated

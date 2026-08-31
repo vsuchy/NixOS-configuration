@@ -61,6 +61,11 @@ For `thinkpad-p14s`, Disko declares a single GPT disk:
 | Swap | `SWAP` | LUKS2 + swap | `/dev/mapper/cryptswap` | 90 GiB |
 | Root | `ROOT` | LUKS2 + btrfs | `/` | remaining space |
 
+After TPM enrollment, the systemd-based initrd unlocks both LUKS mappings with
+TPM2 tokens. Their passphrase slots remain available for recovery. Discards are
+passed through both mappings to support SSD trimming; this also reveals which
+encrypted blocks are unused.
+
 The btrfs filesystem uses these subvolumes:
 
 - `@` mounted at `/`
@@ -77,6 +82,27 @@ LUKS encryption:
 | EFI system partition | `BOOT` | FAT32 | `/boot` | 1 GiB |
 | Swap | `SWAP` | swap | swap device | 16 GiB |
 | Root | `ROOT` | btrfs | `/` | remaining space |
+
+## Boot Security
+
+Boot security is enabled only for `thinkpad-p14s`:
+
+- Lanzaboote replaces the regular systemd-boot installer and signs the unified
+  kernel images on the EFI system partition.
+- The Secure Boot signing keys live in `/var/lib/sbctl`, outside this repository
+  and inside the encrypted root filesystem.
+- Measured Boot uses `systemd-pcrlock` with PCRs 0, 4, and 7, covering firmware
+  code, the boot application chain, and Secure Boot policy. Five boot
+  generations are retained.
+- `cryptroot` and `cryptswap` are configured for TPM2 discovery. A TPM token
+  still has to be enrolled into each LUKS2 volume after Secure Boot is active;
+  the Disko options do not create those tokens.
+
+Keep the original LUKS passphrases or separate recovery keys and an encrypted,
+offline backup of `/var/lib/sbctl`. Do not commit any of these secrets. Ordinary
+NixOS rebuilds update the managed PCR policy automatically. Firmware, Secure
+Boot key, or TPM changes can make the next boot require a recovery passphrase.
+See [INSTALL.md](./INSTALL.md) for provisioning and recovery details.
 
 ## Maintenance
 

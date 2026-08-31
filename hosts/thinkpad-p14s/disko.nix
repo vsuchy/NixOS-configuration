@@ -39,7 +39,10 @@ in
             content = {
               type = "luks";
               name = "cryptswap";
-              settings.allowDiscards = true;
+              settings = {
+                allowDiscards = true;
+                crypttabExtraOpts = [ "tpm2-device=auto" ];
+              };
               extraFormatArgs = [
                 "--type"
                 "luks2"
@@ -61,7 +64,10 @@ in
             content = {
               type = "luks";
               name = "cryptroot";
-              settings.allowDiscards = true;
+              settings = {
+                allowDiscards = true;
+                crypttabExtraOpts = [ "tpm2-device=auto" ];
+              };
               extraFormatArgs = [
                 "--type"
                 "luks2"

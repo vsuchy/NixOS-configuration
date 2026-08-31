@@ -15,6 +15,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.1.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,6 +32,7 @@
       nixpkgs-unstable,
       disko,
       home-manager,
+      lanzaboote,
       nixos-hardware,
       ...
     }:
@@ -61,6 +67,7 @@
         "thinkpad-p14s" = mkHost {
           username = "vs";
           modules = [
+            lanzaboote.nixosModules.lanzaboote
             nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen6
             ./hosts/thinkpad-p14s/configuration.nix
           ];

@@ -5,10 +5,6 @@
   ...
 }:
 
-let
-  niriSession = "${config.programs.niri.package}/bin/niri-session";
-in
-
 {
   # --- Login manager ---
 
@@ -17,13 +13,8 @@ in
     useTextGreeter = true;
 
     settings = {
-      initial_session = {
-        command = niriSession;
-        user = username;
-      };
-
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --cmd ${niriSession}";
+        command = "${pkgs.tuigreet}/bin/tuigreet -u ${username} -c ${config.programs.niri.package}/bin/niri-session";
       };
     };
   };
