@@ -38,16 +38,15 @@
     }:
 
     let
+      username = "vs";
+
       systems = [
         "x86_64-linux"
         "aarch64-linux"
       ];
 
       mkHost =
-        {
-          modules,
-          username,
-        }:
+        { modules }:
 
         nixpkgs.lib.nixosSystem {
           specialArgs = {
@@ -65,7 +64,6 @@
     {
       nixosConfigurations = {
         "thinkpad-p14s" = mkHost {
-          username = "vs";
           modules = [
             lanzaboote.nixosModules.lanzaboote
             nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen6
@@ -73,13 +71,11 @@
           ];
         };
         "vm-qemu" = mkHost {
-          username = "vs";
           modules = [
             ./hosts/vm-qemu/configuration.nix
           ];
         };
         "vm-fusion" = mkHost {
-          username = "vs";
           modules = [
             ./hosts/vm-fusion/configuration.nix
           ];

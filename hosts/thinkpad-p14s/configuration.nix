@@ -10,7 +10,6 @@ in
     ./hardware-configuration.nix
 
     ../../profiles/workstation.nix
-    ../../modules/bluetooth.nix
     ../../modules/tailscale.nix
     ../../modules/virtualization.nix
   ];
@@ -18,7 +17,10 @@ in
   networking.hostName = "thinkpad-p14s";
   system.stateVersion = "26.05";
 
-  hardware.enableRedistributableFirmware = true;
+  hardware = {
+    bluetooth.enable = true;
+    enableRedistributableFirmware = true;
+  };
 
   # --- Boot ---
 
