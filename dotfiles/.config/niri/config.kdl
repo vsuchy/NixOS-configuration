@@ -1,3 +1,7 @@
+// --- Include ---
+
+include optional=true "gnome-boxes.kdl"
+
 // --- General ---
 
 hotkey-overlay { skip-at-startup; }
@@ -83,20 +87,12 @@ window-rule {
   geometry-corner-radius 5
 }
 
-window-rule {
-  match app-id="org.gnome.Boxes"
-
-  default-column-width { proportion 1.0; }
-  open-maximized-to-edges false
-}
-
 // --- Key Bindings ---
 
 binds {
   Super+Alt+1 { spawn "firefox"; }
   Super+Alt+2 { spawn "ghostty"; }
   Super+Alt+3 { spawn "obsidian"; }
-  Super+Alt+4 { spawn "gnome-boxes"; }
 
   Super+Q { close-window; }
 

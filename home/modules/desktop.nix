@@ -6,6 +6,7 @@
 }:
 
 let
+  gnomeBoxesEnabled = osConfig.virtualisation.libvirtd.enable;
   lockCommand = lib.getExe osConfig.programs.gtklock.package;
   wallpapers = ../../dotfiles/.config/wallpapers;
 in
@@ -17,6 +18,9 @@ in
     "ghostty/config".source = ../../dotfiles/.config/ghostty/config;
     "mako/config".source = ../../dotfiles/.config/mako/config;
     "niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
+    "niri/gnome-boxes.kdl" = lib.mkIf gnomeBoxesEnabled {
+      source = ../../dotfiles/.config/niri/gnome-boxes.kdl;
+    };
     "wallpapers".source = wallpapers;
     "waybar".source = ../../dotfiles/.config/waybar;
   };
@@ -33,7 +37,7 @@ in
       obsidian
     ]
     ++ lib.optionals osConfig.hardware.bluetooth.enable [ bluetui ]
-    ++ lib.optionals osConfig.virtualisation.libvirtd.enable [ gnome-boxes ];
+    ++ lib.optionals gnomeBoxesEnabled [ gnome-boxes ];
 
   # --- Services ---
 

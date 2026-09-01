@@ -1,0 +1,14 @@
+// --- Window Rules ---
+
+window-rule {
+  match app-id="org.gnome.Boxes"
+
+  default-column-width { proportion 1.0; }
+  open-maximized-to-edges false
+}
+
+// --- Key Bindings ---
+
+binds {
+  Super+Alt+4 { spawn "gnome-boxes"; }
+}
