@@ -296,7 +296,7 @@ cp /mnt/etc/nixos/hardware-configuration.nix "./hosts/${NIXOS_VM}/hardware-confi
 
 Disko owns filesystems and swap for both VM configurations. Edit the generated
 `hardware-configuration.nix` and remove `fileSystems` and `swapDevices` unless
-you intentionally reconcile them with the selected host's `disko.nix`.
+you intentionally reconcile them with `hosts/common/disko-vm.nix`.
 
 Install the selected VM host:
 

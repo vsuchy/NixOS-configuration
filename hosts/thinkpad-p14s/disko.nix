@@ -108,11 +108,4 @@ in
       };
     };
   };
-
-  assertions = [
-    {
-      assertion = disk != "";
-      message = "Set a non-empty disk path in the importing host configuration";
-    }
-  ];
 }

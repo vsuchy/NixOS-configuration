@@ -28,17 +28,17 @@ See [INSTALL.md](./INSTALL.md) for the full installation procedure.
 |   |-- modules
 |       |-- ...
 |-- hosts
+|   |-- common
+|   |   |-- disko-vm.nix
 |   |-- thinkpad-p14s
 |   |   |-- configuration.nix
 |   |   |-- disko.nix
 |   |   |-- hardware-configuration.nix
 |   |-- vm-fusion
 |   |   |-- configuration.nix
-|   |   |-- disko.nix
 |   |   |-- hardware-configuration.nix
 |   |-- vm-qemu
 |       |-- configuration.nix
-|       |-- disko.nix
 |       |-- hardware-configuration.nix
 |-- modules
 |   |-- ...
@@ -79,8 +79,8 @@ The btrfs filesystem uses these subvolumes:
 - `@nix` mounted at `/nix`
 - `@log` mounted at `/var/log`
 
-For `vm-qemu` and `vm-fusion`, Disko uses the same GPT and btrfs
-subvolume layout without LUKS encryption:
+For `vm-qemu` and `vm-fusion`, the shared `hosts/common/disko-vm.nix` module
+uses the same GPT and btrfs subvolume layout without LUKS encryption:
 
 | Partition | Label | Format | Mount | Size |
 | --- | --- | --- | --- | ---: |

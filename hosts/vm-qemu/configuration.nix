@@ -6,7 +6,7 @@ in
 
 {
   imports = [
-    (import ./disko.nix { inherit disk; })
+    (import ../common/disko-vm.nix { inherit disk; })
     ./hardware-configuration.nix
 
     ../../profiles/workstation.nix
