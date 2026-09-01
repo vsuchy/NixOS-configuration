@@ -259,8 +259,8 @@ key and TPM enrollment sections above.
 
 | Configuration | Virtualization platform | NixOS ISO | Target disk | Guest integration |
 | --- | --- | --- | --- | --- |
-| `qemu-kvm` | GNOME Boxes on the ThinkPad | `x86_64-linux` | `/dev/vda` | QEMU guest agent and SPICE |
-| `vmware-fusion` | VMware Fusion on an Apple silicon Mac | `aarch64-linux` | `/dev/nvme0n1` | VMware guest tools |
+| `vm-qemu` | GNOME Boxes on the ThinkPad | `x86_64-linux` | `/dev/vda` | QEMU guest agent and SPICE |
+| `vm-fusion` | VMware Fusion on an Apple silicon Mac | `aarch64-linux` | `/dev/nvme0n1` | VMware guest tools |
 
 The QEMU guest services provide display resizing, clipboard sharing, and shared
 folders. The disk paths in the table are defaults; identify the VM disk
@@ -270,8 +270,8 @@ differs.
 Select the configuration for the VM being installed:
 
 ```sh
-NIXOS_VM=qemu-kvm
-# NIXOS_VM=vmware-fusion
+NIXOS_VM=vm-qemu
+# NIXOS_VM=vm-fusion
 ```
 
 Confirm its evaluated target before running the destructive Disko step:

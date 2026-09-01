@@ -15,7 +15,7 @@ in
     ../../modules/virtualization.nix
   ];
 
-  networking.hostName = "VSNixOSTP";
+  networking.hostName = "thinkpad-p14s";
   system.stateVersion = "26.05";
 
   hardware.enableRedistributableFirmware = true;

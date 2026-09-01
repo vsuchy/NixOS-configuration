@@ -43,10 +43,10 @@ jobs:
           - host: thinkpad-p14s
             system: x86_64-linux
             runner: ubuntu-24.04
-          - host: qemu-kvm
+          - host: vm-qemu
             system: x86_64-linux
             runner: ubuntu-24.04
-          - host: vmware-fusion
+          - host: vm-fusion
             system: aarch64-linux
             runner: ubuntu-24.04-arm
 

@@ -12,7 +12,7 @@ in
     ../../profiles/workstation.nix
   ];
 
-  networking.hostName = "VSNixOSVM";
+  networking.hostName = "vm-fusion";
   system.stateVersion = "26.05";
 
   virtualisation.vmware.guest.enable = true;

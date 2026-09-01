@@ -72,16 +72,16 @@
             ./hosts/thinkpad-p14s/configuration.nix
           ];
         };
-        "qemu-kvm" = mkHost {
+        "vm-qemu" = mkHost {
           username = "vs";
           modules = [
-            ./hosts/qemu-kvm/configuration.nix
+            ./hosts/vm-qemu/configuration.nix
           ];
         };
-        "vmware-fusion" = mkHost {
+        "vm-fusion" = mkHost {
           username = "vs";
           modules = [
-            ./hosts/vmware-fusion/configuration.nix
+            ./hosts/vm-fusion/configuration.nix
           ];
         };
       };

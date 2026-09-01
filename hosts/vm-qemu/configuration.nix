@@ -12,7 +12,7 @@ in
     ../../profiles/workstation.nix
   ];
 
-  networking.hostName = "VSNixOSVM";
+  networking.hostName = "vm-qemu";
   system.stateVersion = "26.05";
 
   services = {
