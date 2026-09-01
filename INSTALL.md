@@ -1,8 +1,8 @@
 # Installation Guide
 
 This guide installs `thinkpad-p14s` with NixOS `26.05` from the NixOS minimal
-ISO. It assumes UEFI boot, a TPM2 device, and a single target disk. The VMware
-host differences are covered at the end.
+ISO. It assumes UEFI boot, a TPM2 device, and a single target disk. Differences
+for the QEMU/KVM and VMware Fusion guests are covered at the end.
 
 ## 1. Boot The Installer
 
@@ -59,9 +59,10 @@ List disks carefully:
 lsblk -o NAME,SIZE,TYPE,MODEL,SERIAL,MOUNTPOINTS
 ```
 
-Both host configurations declare `/dev/nvme0n1` as their target disk. If the
-target disk has a different device path, update the `disk` value in the selected
-host's `configuration.nix` before continuing.
+The ThinkPad and VMware Fusion configurations declare `/dev/nvme0n1` as their
+target disk; the QEMU/KVM configuration declares `/dev/vda`. If the target
+disk has a different device path, update the `disk` value in the selected host's
+`configuration.nix` before continuing.
 
 Confirm the target disk declared by the ThinkPad configuration:
 
@@ -249,42 +250,58 @@ volumes. After a TPM reset or when deliberately replacing a token, repeat the
 corresponding enrollment command with `--wipe-slot=tpm2`; enrollment completes
 before the old TPM slot is removed.
 
-## VMware Fusion VM Notes
+## Virtual Machine Notes
 
-For `vmware-fusion` on a Mac with Apple silicon, use an `aarch64-linux` NixOS
-ISO. This host uses Disko with the same btrfs subvolume layout as
+Both VM configurations use the same GPT and btrfs subvolume layout as
 `thinkpad-p14s`, but without LUKS encryption and with a 16 GiB swap partition.
-It does not import Lanzaboote or configure TPM unlocking, so skip the Secure
-Boot key and TPM enrollment sections above.
+Neither imports Lanzaboote nor configures TPM unlocking, so skip the Secure Boot
+key and TPM enrollment sections above.
 
-Identify the VM disk carefully. The VM host configuration expects
-`/dev/nvme0n1`. If necessary, update its `disk` value, then confirm the evaluated
-target:
+| Configuration | Virtualization platform | NixOS ISO | Target disk | Guest integration |
+| --- | --- | --- | --- | --- |
+| `qemu-kvm` | GNOME Boxes on the ThinkPad | `x86_64-linux` | `/dev/vda` | QEMU guest agent and SPICE |
+| `vmware-fusion` | VMware Fusion on an Apple silicon Mac | `aarch64-linux` | `/dev/nvme0n1` | VMware guest tools |
+
+The QEMU guest services provide display resizing, clipboard sharing, and shared
+folders. The disk paths in the table are defaults; identify the VM disk
+carefully and update the selected host's `disk` value when its device path
+differs.
+
+Select the configuration for the VM being installed:
 
 ```sh
-lsblk "$(nix eval --raw .#nixosConfigurations.vmware-fusion.config.disko.devices.disk.main.device)"
+NIXOS_VM=qemu-kvm
+# NIXOS_VM=vmware-fusion
 ```
 
+Confirm its evaluated target before running the destructive Disko step:
+
 ```sh
-nix run .#disko -- --mode destroy,format,mount --flake .#vmware-fusion
+NIXOS_VM_DISK="$(nix eval --raw ".#nixosConfigurations.${NIXOS_VM}.config.disko.devices.disk.main.device")"
+lsblk "$NIXOS_VM_DISK"
+```
+
+Partition, format, and mount the selected VM disk:
+
+```sh
+nix run .#disko -- --mode destroy,format,mount --flake ".#${NIXOS_VM}"
 ```
 
 Generate the VM hardware configuration:
 
 ```sh
 nixos-generate-config --root /mnt
-cp /mnt/etc/nixos/hardware-configuration.nix ./hosts/vmware-fusion/hardware-configuration.nix
+cp /mnt/etc/nixos/hardware-configuration.nix "./hosts/${NIXOS_VM}/hardware-configuration.nix"
 ```
 
-Disko owns filesystems and swap for `vmware-fusion`. Edit the generated
-`./hosts/vmware-fusion/hardware-configuration.nix` and remove generated
-`fileSystems` and `swapDevices` unless you intentionally reconcile them with
-`hosts/vmware-fusion/disko.nix`.
+Disko owns filesystems and swap for both VM configurations. Edit the generated
+`hardware-configuration.nix` and remove `fileSystems` and `swapDevices` unless
+you intentionally reconcile them with the selected host's `disko.nix`.
 
-Install the VM host with:
+Install the selected VM host:
 
 ```sh
 nix flake check
-nixos-rebuild dry-build --flake .#vmware-fusion
-nixos-install --flake .#vmware-fusion
+nixos-rebuild dry-build --flake ".#${NIXOS_VM}"
+nixos-install --flake ".#${NIXOS_VM}"
 ```

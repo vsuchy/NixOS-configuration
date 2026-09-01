@@ -22,7 +22,7 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v31
 
-      - name: Evaluate both hosts
+      - name: Evaluate all hosts
         run: nix flake check --all-systems --no-build
 
       - name: Check formatting
@@ -41,6 +41,9 @@ jobs:
       matrix:
         include:
           - host: thinkpad-p14s
+            system: x86_64-linux
+            runner: ubuntu-24.04
+          - host: qemu-kvm
             system: x86_64-linux
             runner: ubuntu-24.04
           - host: vmware-fusion

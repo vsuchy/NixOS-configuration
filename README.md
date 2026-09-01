@@ -12,6 +12,7 @@ See [INSTALL.md](./INSTALL.md) for the full installation procedure.
 | Host | Hostname | Architecture | Target |
 | --- | --- | --- | --- |
 | `thinkpad-p14s` | `VSNixOSTP` | `x86_64-linux` | Lenovo ThinkPad P14s Gen 6, AMD Ryzen AI PRO 370, 64 GB RAM |
+| `qemu-kvm` | `VSNixOSVM` | `x86_64-linux` | QEMU/KVM VM in GNOME Boxes on the ThinkPad |
 | `vmware-fusion` | `VSNixOSVM` | `aarch64-linux` | VMware Fusion VM on Apple silicon Mac |
 
 ## Structure
@@ -27,6 +28,10 @@ See [INSTALL.md](./INSTALL.md) for the full installation procedure.
 |   |-- modules
 |       |-- ...
 |-- hosts
+|   |-- qemu-kvm
+|   |   |-- configuration.nix
+|   |   |-- disko.nix
+|   |   |-- hardware-configuration.nix
 |   |-- thinkpad-p14s
 |   |   |-- configuration.nix
 |   |   |-- disko.nix
@@ -74,8 +79,8 @@ The btrfs filesystem uses these subvolumes:
 - `@nix` mounted at `/nix`
 - `@log` mounted at `/var/log`
 
-For `vmware-fusion`, Disko uses the same GPT and btrfs subvolume layout without
-LUKS encryption:
+For `qemu-kvm` and `vmware-fusion`, Disko uses the same GPT and btrfs
+subvolume layout without LUKS encryption:
 
 | Partition | Label | Format | Mount | Size |
 | --- | --- | --- | --- | ---: |
@@ -107,7 +112,7 @@ See [INSTALL.md](./INSTALL.md) for provisioning and recovery details.
 ## Maintenance
 
 Run these commands from the repository root. The examples target
-`thinkpad-p14s`; use `.#vmware-fusion` for the VMware Fusion VM.
+`thinkpad-p14s`; use `.#qemu-kvm` or `.#vmware-fusion` for a VM.
 
 ### Rebuild
 
