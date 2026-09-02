@@ -1,16 +1,14 @@
 _:
 
-let
-  disk = "/dev/vda";
-in
-
 {
   imports = [
-    (import ../common/disko-vm.nix { inherit disk; })
+    ../common/disko-vm.nix
     ./hardware-configuration.nix
 
     ../../profiles/workstation.nix
   ];
+
+  disko.devices.disk.main.device = "/dev/vda";
 
   networking.hostName = "vm-qemu";
   system.stateVersion = "26.05";

@@ -1,8 +1,3 @@
-{
-  disk,
-  ...
-}:
-
 let
   btrfsOptions = [
     "compress=zstd"
@@ -14,7 +9,6 @@ in
   disko.devices = {
     disk.main = {
       type = "disk";
-      device = disk;
       content = {
         type = "gpt";
         partitions = {

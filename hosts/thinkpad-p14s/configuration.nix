@@ -3,19 +3,17 @@
   ...
 }:
 
-let
-  disk = "/dev/nvme0n1";
-in
-
 {
   imports = [
-    (import ./disko.nix { inherit disk; })
+    ./disko.nix
     ./hardware-configuration.nix
 
     ../../profiles/workstation.nix
     ../../modules/nixos/tailscale.nix
     ../../modules/nixos/virtualization.nix
   ];
+
+  disko.devices.disk.main.device = "/dev/nvme0n1";
 
   networking.hostName = "thinkpad-p14s";
   system.stateVersion = "26.05";
