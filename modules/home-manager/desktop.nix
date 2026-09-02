@@ -31,8 +31,6 @@ in
   home.packages =
     with pkgs;
     [
-      swaybg
-
       firefox
       ghostty
       obsidian
