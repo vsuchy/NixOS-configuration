@@ -16,6 +16,7 @@ in
 
   xdg.configFile = {
     "ghostty/config".source = ../../dotfiles/.config/ghostty/config;
+    "gtklock/config.ini".source = ../../dotfiles/.config/gtklock/config.ini;
     "mako/config".source = ../../dotfiles/.config/mako/config;
     "niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
     "niri/gnome-boxes.kdl" = lib.mkIf gnomeBoxesEnabled {
