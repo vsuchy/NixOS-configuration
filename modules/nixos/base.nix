@@ -32,16 +32,7 @@
       "rd.systemd.show_status=auto"
     ];
 
-    loader = {
-      efi.canTouchEfiVariables = true;
-      timeout = 0;
-
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 5;
-      };
-    };
-
+    loader.timeout = 0;
     plymouth.enable = true;
   };
 

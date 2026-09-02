@@ -1,10 +1,10 @@
-_:
+{ ... }:
 
 {
   imports = [
-    ./modules/cli.nix
-    ./modules/desktop.nix
-    ./modules/development.nix
+    ./cli.nix
+    ./desktop.nix
+    ./development.nix
   ];
 
   home.stateVersion = "26.05";

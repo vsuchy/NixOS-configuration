@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   username,
   ...
@@ -14,7 +15,7 @@
 
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet -u ${username} -c ${config.programs.niri.package}/bin/niri-session";
+        command = "${lib.getExe pkgs.tuigreet} -u ${username} -c ${config.programs.niri.package}/bin/niri-session";
       };
     };
   };

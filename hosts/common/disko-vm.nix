@@ -1,4 +1,7 @@
-{ disk }:
+{
+  disk,
+  ...
+}:
 
 let
   btrfsOptions = [

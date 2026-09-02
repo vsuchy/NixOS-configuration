@@ -23,10 +23,6 @@ See [INSTALL.md](./INSTALL.md) for the full installation procedure.
 |-- flake.lock
 |-- README.md
 |-- INSTALL.md
-|-- home
-|   |-- default.nix
-|   |-- modules
-|       |-- ...
 |-- hosts
 |   |-- common
 |   |   |-- disko-vm.nix
@@ -41,7 +37,13 @@ See [INSTALL.md](./INSTALL.md) for the full installation procedure.
 |       |-- configuration.nix
 |       |-- hardware-configuration.nix
 |-- modules
-|   |-- ...
+|   |-- home-manager
+|   |   |-- default.nix
+|   |   |-- cli.nix
+|   |   |-- desktop.nix
+|   |   |-- development.nix
+|   |-- nixos
+|       |-- ...
 |-- profiles
 |   |-- workstation.nix
 |-- dotfiles
@@ -53,7 +55,7 @@ target disk, state version, and hardware-specific settings. The top-level flake
 composes each host and exposes it as a `nixosConfigurations` entry, while its
 `hardware-configuration.nix` declares the host platform. The workstation profile
 composes the shared NixOS modules and attaches the generic Home Manager profile
-to the configured user. The Home Manager profile composes its console, desktop,
+to the configured user. The Home Manager profile composes its CLI, desktop,
 and development modules independently of the user's name.
 
 ## Disk Layout

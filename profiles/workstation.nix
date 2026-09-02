@@ -6,8 +6,8 @@
 
 {
   imports = [
-    ../modules/base.nix
-    ../modules/desktop.nix
+    ../modules/nixos/base.nix
+    ../modules/nixos/desktop.nix
   ];
 
   home-manager = {
@@ -18,6 +18,6 @@
       inherit nixpkgs-unstable;
     };
 
-    users.${username} = import ../home;
+    users.${username} = import ../modules/home-manager;
   };
 }

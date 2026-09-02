@@ -1,4 +1,7 @@
-{ lib, pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 let
   disk = "/dev/nvme0n1";
@@ -10,8 +13,8 @@ in
     ./hardware-configuration.nix
 
     ../../profiles/workstation.nix
-    ../../modules/tailscale.nix
-    ../../modules/virtualization.nix
+    ../../modules/nixos/tailscale.nix
+    ../../modules/nixos/virtualization.nix
   ];
 
   networking.hostName = "thinkpad-p14s";
@@ -31,7 +34,7 @@ in
   boot = {
     initrd.systemd.enable = true;
 
-    loader.systemd-boot.enable = lib.mkForce false;
+    loader.efi.canTouchEfiVariables = true;
 
     lanzaboote = {
       enable = true;
