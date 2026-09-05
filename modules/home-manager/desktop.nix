@@ -1,5 +1,6 @@
 {
   lib,
+  nixpkgs-unstable,
   osConfig,
   pkgs,
   ...
@@ -7,8 +8,7 @@
 
 let
   gnomeBoxesEnabled = osConfig.virtualisation.libvirtd.enable;
-  lockCommand = lib.getExe osConfig.programs.gtklock.package;
-  wallpapers = ../../dotfiles/.config/wallpapers;
+  pkgsUnstable = nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 
 {
@@ -16,14 +16,11 @@ in
 
   xdg.configFile = {
     "ghostty/config".source = ../../dotfiles/.config/ghostty/config;
-    "gtklock/config.ini".source = ../../dotfiles/.config/gtklock/config.ini;
-    "mako/config".source = ../../dotfiles/.config/mako/config;
     "niri/config.kdl".source = ../../dotfiles/.config/niri/config.kdl;
     "niri/gnome-boxes.kdl" = lib.mkIf gnomeBoxesEnabled {
       source = ../../dotfiles/.config/niri/gnome-boxes.kdl;
     };
-    "wallpapers".source = wallpapers;
-    "waybar".source = ../../dotfiles/.config/waybar;
+    "wallpapers".source = ../../dotfiles/.config/wallpapers;
   };
 
   # --- Packages ---
@@ -31,71 +28,13 @@ in
   home.packages =
     with pkgs;
     [
+      pkgsUnstable.noctalia
+
       firefox
       ghostty
       obsidian
     ]
-    ++ lib.optionals osConfig.hardware.bluetooth.enable [ bluetui ]
     ++ lib.optionals gnomeBoxesEnabled [ gnome-boxes ];
-
-  # --- Services ---
-
-  services = {
-    mako.enable = true;
-
-    swayidle = {
-      enable = true;
-      systemdTargets = [ "niri.service" ];
-
-      timeouts = [
-        {
-          timeout = 3600;
-          command = lockCommand;
-        }
-      ];
-
-      events = {
-        "before-sleep" = lockCommand;
-        lock = lockCommand;
-      };
-    };
-  };
-
-  # --- Waybar ---
-
-  programs.waybar = {
-    enable = true;
-
-    systemd = {
-      enable = true;
-      targets = [ "niri.service" ];
-    };
-  };
-
-  # --- Swaybg ---
-
-  systemd.user.services.swaybg = {
-    Install.WantedBy = [ "niri.service" ];
-
-    Service = {
-      ExecStart = "${lib.getExe pkgs.swaybg} ${
-        lib.escapeShellArgs [
-          "-m"
-          "fill"
-          "-i"
-          "${wallpapers}/nixos_dracula.svg"
-        ]
-      }";
-
-      Restart = "on-failure";
-    };
-
-    Unit = {
-      ConditionEnvironment = "WAYLAND_DISPLAY";
-      After = [ "niri.service" ];
-      PartOf = [ "niri.service" ];
-    };
-  };
 
   # --- Theme ---
 

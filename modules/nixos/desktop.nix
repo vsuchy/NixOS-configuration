@@ -44,18 +44,13 @@
 
   fonts.packages = with pkgs; [
     cascadia-code
-    font-awesome
     inter
   ];
 
-  # --- Programs ---
+  # --- Niri ---
 
-  programs = {
-    niri = {
-      enable = true;
-      useNautilus = false;
-    };
-
-    gtklock.enable = true;
+  programs.niri = {
+    enable = true;
+    useNautilus = false;
   };
 }

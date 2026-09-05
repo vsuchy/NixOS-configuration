@@ -44,19 +44,24 @@
 
   networking.networkmanager.enable = true;
 
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-  };
+  # --- Services ---
 
-  # --- Printing ---
+  services = {
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+    };
 
-  services.printing = {
-    enable = true;
+    printing = {
+      enable = true;
 
-    drivers = with pkgs; [
-      brlaser
-    ];
+      drivers = with pkgs; [
+        brlaser
+      ];
+    };
+
+    power-profiles-daemon.enable = true;
+    upower.enable = true;
   };
 
   # --- Shell ---

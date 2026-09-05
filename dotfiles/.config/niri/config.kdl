@@ -4,9 +4,15 @@ include optional=true "gnome-boxes.kdl"
 
 // --- General ---
 
+spawn-at-startup "noctalia"
+
 hotkey-overlay { skip-at-startup; }
 prefer-no-csd
 recent-windows { off; }
+
+debug {
+  honor-xdg-activation-with-invalid-serial
+}
 
 // --- Input ---
 
@@ -70,14 +76,6 @@ layout {
   }
 
   background-color "#8BE9FD"
-}
-
-// --- Layer Rules ---
-
-layer-rule {
-  match namespace="waybar"
-
-  opacity 0.99
 }
 
 // --- Window Rules ---
