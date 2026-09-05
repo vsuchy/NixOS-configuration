@@ -1,4 +1,5 @@
 {
+  fullName,
   pkgs,
   username,
   ...
@@ -71,7 +72,7 @@
   # --- Users ---
 
   users.users.${username} = {
-    description = "Vlad Suchy";
+    description = fullName;
     isNormalUser = true;
     shell = pkgs.zsh;
 

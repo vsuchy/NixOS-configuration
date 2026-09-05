@@ -39,6 +39,7 @@
 
     let
       username = "vs";
+      fullName = "Vlad Suchy";
 
       systems = [
         "x86_64-linux"
@@ -50,7 +51,7 @@
 
         nixpkgs.lib.nixosSystem {
           specialArgs = {
-            inherit nixpkgs-unstable username;
+            inherit nixpkgs-unstable username fullName;
           };
 
           modules = [
