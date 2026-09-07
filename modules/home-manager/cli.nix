@@ -26,11 +26,15 @@ in
 
   home.packages = with pkgs; [
     ast-grep
+    brightnessctl
+    ddcutil
+    imagemagick
     jq
     libnotify
     ripgrep
     unzip
     wget
+    wl-clipboard
     zip
 
     fastfetch
