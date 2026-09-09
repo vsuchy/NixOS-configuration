@@ -43,6 +43,24 @@ in
     ]
     ++ lib.optionals gnomeBoxesEnabled [ gnome-boxes ];
 
+  # --- Noctalia ---
+
+  systemd.user.services.noctalia = {
+    Unit = {
+      Description = "Noctalia desktop shell";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    Service = {
+      ExecStart = lib.getExe pkgsUnstable.noctalia;
+      Restart = "on-failure";
+      RestartSec = "5s";
+    };
+
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
   # --- Theme ---
 
   xdg.configFile = {

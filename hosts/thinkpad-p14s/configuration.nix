@@ -21,6 +21,7 @@
   hardware = {
     bluetooth.enable = true;
     enableRedistributableFirmware = true;
+    i2c.enable = true;
   };
 
   # --- Boot ---

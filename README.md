@@ -128,7 +128,7 @@ sudo nixos-rebuild switch --flake .#thinkpad-p14s
 To build the configuration without activating it:
 
 ```sh
-sudo nixos-rebuild dry-build --flake .#thinkpad-p14s
+nixos-rebuild build --flake .#thinkpad-p14s
 ```
 
 ### Update

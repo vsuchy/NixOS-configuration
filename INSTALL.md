@@ -61,8 +61,8 @@ lsblk -o NAME,SIZE,TYPE,MODEL,SERIAL,MOUNTPOINTS
 
 The ThinkPad and VMware Fusion configurations declare `/dev/nvme0n1` as their
 target disk; the QEMU/KVM configuration declares `/dev/vda`. If the target
-disk has a different device path, update the `disk` value in the selected host's
-`configuration.nix` before continuing.
+disk has a different device path, update `disko.devices.disk.main.device` in the
+selected host's `configuration.nix` before continuing.
 
 Confirm the target disk declared by the ThinkPad configuration:
 
@@ -168,7 +168,31 @@ reboot
 Keep Secure Boot disabled for this first boot. Unlock `ROOT` and `SWAP` with
 their LUKS passphrases.
 
-## 10. Enroll Secure Boot Keys
+## Post-Installation
+
+After rebooting, log in as `vs`. Run the commands below from the installed
+system, using `sudo` where shown. The ThinkPad-only steps do not apply to either
+VM. Account credentials, SSH keys, peripheral setup, and personal data require
+manual provisioning in addition to the declarative configuration.
+
+### 1. Connect To The Network
+
+If the installed system is not already connected, configure its network through
+Noctalia or NetworkManager. For Wi-Fi:
+
+```sh
+nmcli radio wifi on
+nmcli device wifi list
+nmcli --ask device wifi connect "SSID"
+```
+
+Confirm connectivity before authenticating any services:
+
+```sh
+ping -c 3 cache.nixos.org
+```
+
+### 2. Enroll Secure Boot Keys (ThinkPad Only)
 
 First confirm that Lanzaboote signed the installed EFI images:
 
@@ -205,7 +229,7 @@ sudo sbctl verify
 
 `bootctl status` should report `Secure Boot: enabled (user)` and TPM2 support.
 
-## 11. Enroll TPM2 LUKS Unlocking
+### 3. Enroll TPM2 LUKS Unlocking (ThinkPad Only)
 
 Enroll TPM tokens only after booting once with Secure Boot active, so the
 managed PCR 7 measurements describe the enforced Secure Boot policy. Confirm
@@ -250,22 +274,139 @@ volumes. After a TPM reset or when deliberately replacing a token, repeat the
 corresponding enrollment command with `--wipe-slot=tpm2`; enrollment completes
 before the old TPM slot is removed.
 
+### 4. Back Up Recovery Material (ThinkPad Only)
+
+Make an encrypted offline backup of `/var/lib/sbctl`, including its keys and
+`GUID` file, and retain the recovery passphrases for both LUKS volumes. Keep the
+backup outside this machine and outside this repository. Firmware, Secure Boot
+key, or TPM changes can require the recovery passphrases on the next boot.
+
+### 5. Authenticate Tailscale And Enable Mullvad (ThinkPad Only)
+
+The configuration starts `tailscaled`, but joining the tailnet requires a
+one-time interactive login:
+
+```sh
+sudo tailscale up
+```
+
+Open the printed URL, authenticate to the intended tailnet, and approve the
+device in the Tailscale admin console if device approval is enabled.
+
+The configured exit node is `sk-bts-wg-001.mullvad.ts.net`. Ensure the tailnet has
+the Mullvad VPN add-on and this device has access to it through the admin console
+or tailnet policy. See [Tailscale's Mullvad setup instructions](https://tailscale.com/docs/features/exit-nodes/mullvad-exit-nodes).
+
+Once the exit node appears, apply the flags declared in
+`modules/nixos/tailscale.nix` and check the connection:
+
+```sh
+tailscale exit-node list
+sudo systemctl restart tailscaled-set.service
+tailscale status
+```
+
+Confirm that `sk-bts-wg-001.mullvad.ts.net` is selected as the exit node. The
+configuration also grants `vs` operator access and allows direct LAN access.
+The settings service retries on failure, but retries cannot authenticate the
+device or grant Mullvad access. If the configured exit node is unavailable,
+choose an available node in `modules/nixos/tailscale.nix` and rebuild.
+
+### 6. Set Up SSH Signing And GitHub Access
+
+Git is configured to sign commits and tags with `~/.ssh/id_ed25519.pub`. Restore
+the matching private and public keys from your backup, or generate a new pair if
+neither file exists:
+
+```sh
+install -d -m 0700 ~/.ssh
+ssh-keygen -t ed25519 -C "git@vsuchy.com" -f ~/.ssh/id_ed25519
+```
+
+Use a passphrase for the private key. After restoring or generating the pair,
+set its permissions and load it into the graphical session's SSH agent:
+
+```sh
+chmod 0700 ~/.ssh
+chmod 0600 ~/.ssh/id_ed25519
+chmod 0644 ~/.ssh/id_ed25519.pub
+ssh-add ~/.ssh/id_ed25519
+```
+
+Repeat `ssh-add` when the agent needs the key unlocked. Add the public key to
+GitHub as a **Signing Key** so GitHub can verify signed commits and tags. For
+SSH pushes, also register it as an **Authentication Key**; GitHub requires a
+separate entry for each use. See [GitHub's SSH key instructions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+
+If using SSH for this repository, change the copied clone's HTTPS remote:
+
+```sh
+git -C ~/Projects/NixOS-configuration remote set-url origin git@github.com:vsuchy/NixOS-configuration.git
+```
+
+If retaining HTTPS, configure GitHub authentication for pushes separately.
+Review and commit any host configuration edits made during installation once
+signing is ready. Keep private keys outside the repository.
+
+### 7. Authenticate Codex
+
+Before using Codex, sign in as `vs` and complete the browser flow:
+
+```sh
+codex login
+codex login status
+```
+
+For API-key authentication or a browserless login, follow the
+[official OpenAI authentication documentation](https://learn.chatgpt.com/docs/auth).
+Credentials are local user state and must not be committed to this repository.
+
+### 8. Configure Peripherals And Restore Personal Data
+
+Complete the steps relevant to the machine:
+
+- On the ThinkPad, pair Bluetooth devices through Noctalia.
+- For a printer, add a queue through [CUPS administration](http://localhost:631)
+  and authenticate as `vs` when prompted. The configuration installs the
+  `brlaser` driver but does not declare a printer queue.
+- For external-monitor brightness on the ThinkPad, enable DDC/CI in the
+  monitor's on-screen settings if necessary. Run `ddcutil detect` as `vs` from
+  the graphical session to check detection and device access.
+- Restore documents and application data from backup, open the existing
+  Obsidian vault, and sign in to any optional services you use, such as Firefox
+  Sync, Obsidian Sync, or private container registries.
+- On the ThinkPad, create or import virtual machines through GNOME Boxes as
+  needed. VM definitions and disk images are not provisioned by this flake.
+
+### 9. Verify The Desktop Session
+
+Noctalia starts automatically as a systemd user service when the graphical
+session starts. Check it from a terminal in Niri:
+
+```sh
+systemctl --user status noctalia.service
+```
+
+Use Noctalia's **Lock & Suspend** action and confirm that the session requires
+the `vs` password to unlock after resuming. If migrating from a configuration
+that launched Noctalia directly from Niri, log out and back in after the first
+rebuild so the existing process is replaced by the supervised service.
+
 ## Virtual Machine Notes
 
 Both VM configurations use the same GPT and btrfs subvolume layout as
 `thinkpad-p14s`, but without LUKS encryption and with a 16 GiB swap partition.
 Neither imports Lanzaboote nor configures TPM unlocking, so skip the Secure Boot
-key and TPM enrollment sections above.
+key creation and the ThinkPad-only post-installation steps above.
 
 | Configuration | Virtualization platform | NixOS ISO | Target disk | Guest integration |
 | --- | --- | --- | --- | --- |
 | `vm-qemu` | GNOME Boxes on the ThinkPad | `x86_64-linux` | `/dev/vda` | QEMU guest agent and SPICE |
 | `vm-fusion` | VMware Fusion on an Apple silicon Mac | `aarch64-linux` | `/dev/nvme0n1` | VMware guest tools |
 
-The QEMU guest services provide display resizing, clipboard sharing, and shared
-folders. The disk paths in the table are defaults; identify the VM disk
-carefully and update the selected host's `disk` value when its device path
-differs.
+The disk paths in the table are defaults; identify the VM disk carefully and
+update the selected host's `disko.devices.disk.main.device` value when its
+device path differs.
 
 Select the configuration for the VM being installed:
 
@@ -305,3 +446,7 @@ nix flake check
 nixos-rebuild dry-build --flake ".#${NIXOS_VM}"
 nixos-install --flake ".#${NIXOS_VM}"
 ```
+
+Before rebooting, set the root and `vs` passwords and copy the repository into
+the installed system as described in [step 9](#9-install-nixos). After rebooting,
+complete the applicable [post-installation steps](#post-installation).

@@ -7,7 +7,7 @@ shell.animation.speed = 0.75
 
 # --- Wallpaper ---
 
-wallpaper.directory = "/home/vs/Pictures/Wallpapers"
+wallpaper.directory = "~/Pictures/Wallpapers"
 wallpaper.transition_on_startup = true
 
 # --- Template ---
@@ -61,7 +61,7 @@ osd.background_opacity = 1.00
 
 # --- Shell ---
 
-shell.avatar_path = "/home/vs/Pictures/Avatars/AvatarSilhouette.png"
+shell.avatar_path = "~/Pictures/Avatars/AvatarSilhouette.png"
 
 shell.time_format = "{:%H:%M}"
 shell.date_format = "{:%d.:%m.:%Y}"
@@ -141,4 +141,4 @@ widget.workspaces.style = "minimal"
 
 # ---
 
-wallpaper.default.path = "/home/vs/Pictures/Wallpapers/nixos_dracula.png"
+wallpaper.default.path = "~/Pictures/Wallpapers/nixos_dracula.png"

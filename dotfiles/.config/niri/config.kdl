@@ -4,8 +4,6 @@ include optional=true "gnome-boxes.kdl"
 
 // --- General ---
 
-spawn-at-startup "noctalia"
-
 hotkey-overlay { skip-at-startup; }
 prefer-no-csd
 recent-windows { off; }
