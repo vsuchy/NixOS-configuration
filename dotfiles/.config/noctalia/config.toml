@@ -1,0 +1,144 @@
+# --- Appearence ---
+
+theme.builtin = "Dracula"
+
+shell.font_family = "Inter"
+shell.animation.speed = 0.75
+
+# --- Wallpaper ---
+
+wallpaper.directory = "/home/vs/Pictures/Wallpapers"
+wallpaper.transition_on_startup = true
+
+# --- Template ---
+
+theme.templates.enable_builtin_templates = false
+theme.templates.enable_community_templates = false
+
+# --- Desktop ---
+
+desktop_widgets.enabled = false
+
+# --- Panels ---
+
+shell.panel.floating_offset = 10
+
+shell.panel.wallpaper_placement = "floating"
+shell.panel.wallpaper_position = "center"
+
+# --- Launcher ---
+
+shell.launcher.categories = false
+shell.launcher.show_app_origin_indicator = false
+shell.launcher.sort_by_usage = false
+
+shell.launcher.fetch_exchange_rates = false
+
+# --- Control Center ---
+
+shell.panel.control_center_placement = "floating"
+shell.panel.control_center_position = "top_left"
+
+control_center.sidebar_section = "none"
+control_center.hidden_tabs = [ "media", "screen-time", "weather" ]
+
+control_center.shortcuts = [
+  { type = "wifi" },
+  { type = "bluetooth" },
+  { type = "notification" },
+  { type = "power_profile" }
+]
+
+# --- Notifications ---
+
+notification.offset_y = 10
+notification.background_opacity = 1.00
+
+# --- OSD ---
+
+osd.offset_y = 10
+osd.background_opacity = 1.00
+
+# --- Shell ---
+
+shell.avatar_path = "/home/vs/Pictures/Avatars/AvatarSilhouette.png"
+
+shell.time_format = "{:%H:%M}"
+shell.date_format = "{:%d.:%m.:%Y}"
+
+# --- Security ---
+
+shell.polkit_agent = true
+
+# --- System ---
+
+system.monitor.enabled = false
+
+# --- Services ---
+
+brightness.enable_ddcutil = true
+
+# --- Location ---
+
+weather.enabled = false
+
+# --- Power ---
+
+shell.panel.session_placement = "floating"
+shell.panel.session_position = "center"
+
+shell.session.show_shortcuts = false
+shell.session.actions = [
+  { action = "lock_and_suspend", enabled = true, shortcut = "1" },
+  { action = "reboot", enabled = true, shortcut = "2" },
+  { action = "shutdown", enabled = true, shortcut = "3" },
+  { action = "lock", enabled = false },
+  { action = "logout", enabled = false }
+]
+
+idle.behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+idle.pre_action_fade_seconds = 30
+
+idle.behavior.lock.action = "lock"
+idle.behavior.lock.enabled = true
+idle.behavior.lock.timeout = 3600.0
+
+idle.behavior.screen-off.action = "screen_off"
+idle.behavior.screen-off.enabled = true
+idle.behavior.screen-off.timeout = 3900.0
+
+idle.behavior.lock-and-suspend.action = "lock_and_suspend"
+idle.behavior.lock-and-suspend.enabled = false
+idle.behavior.lock-and-suspend.timeout = 10800.0
+
+# --- Plugins ---
+
+plugins.source = [
+  { name = "official", enabled = false, kind = "git", location = "https://github.com/noctalia-dev/official-plugins" },
+  { name = "community", enabled = false, kind = "git", location = "https://github.com/noctalia-dev/community-plugins" }
+]
+
+# --- Bar: default ---
+
+bar.default.thickness = 40
+bar.default.margin_ends = 10
+bar.default.margin_edge = 10
+bar.default.padding = 10
+bar.default.radius = 5
+bar.default.font_family = "Cascadia Code"
+bar.default.widget_spacing = 7
+
+bar.default.capsule = true
+bar.default.capsule_thickness = 0.75
+bar.default.capsule_radius = 5
+bar.default.capsule_padding = 7.0
+
+bar.default.start = [ "control-center", "launcher", "workspaces" ]
+bar.default.end = [ "brightness", "bluetooth", "volume", "battery", "network", "clipboard", "notifications", "session" ]
+
+widget.clock.format = "{:%H:%M:%S}"
+widget.workspaces.style = "minimal"
+
+# ---
+
+wallpaper.default.path = "/home/vs/Pictures/Wallpapers/nixos_dracula.png"

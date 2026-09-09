@@ -75,7 +75,7 @@ layout {
     urgent-color "#FF5555"
   }
 
-  background-color "#8BE9FD"
+  background-color "#6272A4"
 }
 
 // --- Window Rules ---

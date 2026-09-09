@@ -12,6 +12,13 @@ let
 in
 
 {
+  # --- Assets ---
+
+  home.file = {
+    "Pictures/Avatars/AvatarSilhouette.png".source = ../../assets/avatars/AvatarSilhouette.png;
+    "Pictures/Wallpapers".source = ../../assets/wallpapers;
+  };
+
   # --- Dotfiles ---
 
   xdg.configFile = {
@@ -20,7 +27,7 @@ in
     "niri/gnome-boxes.kdl" = lib.mkIf gnomeBoxesEnabled {
       source = ../../dotfiles/.config/niri/gnome-boxes.kdl;
     };
-    "wallpapers".source = ../../dotfiles/.config/wallpapers;
+    "noctalia/config.toml".source = ../../dotfiles/.config/noctalia/config.toml;
   };
 
   # --- Packages ---
